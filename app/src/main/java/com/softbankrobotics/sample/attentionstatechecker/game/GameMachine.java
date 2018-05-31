@@ -12,14 +12,10 @@ import android.util.Log;
 import com.aldebaran.qi.sdk.QiContext;
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks;
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction;
-import com.softbankrobotics.sample.attentionstatechecker.model.rx.observable.MyHumanDataListObservable;
-import com.softbankrobotics.sample.attentionstatechecker.model.rx.operator.MyOperators;
-
-import java.util.concurrent.TimeUnit;
+import com.softbankrobotics.sample.attentionstatechecker.model.rx.observable.DirectionObservable;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.schedulers.Schedulers;
 
 /**
  * A game machine.
@@ -31,14 +27,7 @@ final class GameMachine implements RobotLifecycleCallbacks {
 
     @Override
     public void onRobotFocusGained(QiContext qiContext) {
-        disposable = new MyHumanDataListObservable(qiContext)
-                .subscribeOn(Schedulers.io())
-                .compose(MyOperators::closest)
-                .compose(MyOperators::attentionState)
-                .distinctUntilChanged()
-                .debounce(2, TimeUnit.SECONDS)
-                .compose(MyOperators::direction)
-                .distinctUntilChanged()
+        disposable = new DirectionObservable(qiContext)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleDirection);
     }
