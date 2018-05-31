@@ -8,6 +8,7 @@ package com.softbankrobotics.sample.attentionstatechecker.model.rx.operator;
 import android.support.annotation.NonNull;
 
 import com.aldebaran.qi.sdk.object.human.AttentionState;
+import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction;
 import com.softbankrobotics.sample.attentionstatechecker.model.data.HumanData;
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Wrapper;
 
@@ -45,6 +46,30 @@ public final class MyOperators {
             }
 
             return Wrapper.of(wrapper.getContent().getAttentionState());
+        });
+    }
+
+    @NonNull
+    public static Observable<Direction> direction(@NonNull Observable<Wrapper<AttentionState>> observable) {
+        return observable.map(wrapper -> {
+            if (!wrapper.hasContent()) {
+                return Direction.UNKNOWN;
+            }
+
+            AttentionState attentionState = wrapper.getContent();
+
+            switch (attentionState) {
+                case LOOKING_UP:
+                    return Direction.UP;
+                case LOOKING_DOWN:
+                    return Direction.DOWN;
+                case LOOKING_LEFT:
+                    return Direction.LEFT;
+                case LOOKING_RIGHT:
+                    return Direction.RIGHT;
+                default:
+                    return Direction.UNKNOWN;
+            }
         });
     }
 }
