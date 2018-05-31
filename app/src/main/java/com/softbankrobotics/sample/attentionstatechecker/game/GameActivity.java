@@ -15,14 +15,14 @@ import com.softbankrobotics.sample.attentionstatechecker.R;
 public class GameActivity extends AppCompatActivity {
 
     @NonNull
-    private final GameMachine gameMachine = new GameMachine();
+    private final GameEngine gameEngine = new GameEngine();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        QiSDK.register(this, gameMachine);
+        QiSDK.register(this, gameEngine);
     }
 
     @Override

@@ -18,9 +18,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 
 /**
- * A game machine.
+ * A game engine.
  */
-final class GameMachine implements RobotLifecycleCallbacks {
+final class GameEngine implements RobotLifecycleCallbacks {
 
     @Nullable
     private Disposable disposable;
