@@ -68,7 +68,7 @@ final class GameMachine {
                 }
                 break;
             case MATCH:
-                if (currentState instanceof GameState.Playing) {
+                if (currentState instanceof GameState.ReadyToPlay || currentState instanceof GameState.Playing) {
                     subject.onNext(GameState.Matching.getInstance());
                 }
                 break;
