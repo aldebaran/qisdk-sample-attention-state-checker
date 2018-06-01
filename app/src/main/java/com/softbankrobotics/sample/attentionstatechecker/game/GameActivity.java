@@ -82,8 +82,9 @@ public class GameActivity extends AppCompatActivity {
             expectedDirectionTextView.setText(playing.getExpectedDirection().toString());
             lookDirectionTextView.setText(playing.getLookDirection().toString());
         } else if (gameState instanceof GameState.Matching) {
-            expectedDirectionTextView.setText("");
-            lookDirectionTextView.setText("");
+            GameState.Matching matching = (GameState.Matching) gameState;
+            expectedDirectionTextView.setText(matching.getMatchingDirection().toString());
+            lookDirectionTextView.setText(matching.getMatchingDirection().toString());
         }
     }
 }

@@ -94,16 +94,16 @@ interface GameState {
      * Game state representing a matching combination.
      */
     final class Matching implements GameState {
-        private Matching() {}
-
         @NonNull
-        static Matching getInstance() {
-            return Holder.INSTANCE;
+        private final Direction matchingDirection;
+
+        Matching(@NonNull Direction matchingDirection) {
+            this.matchingDirection = matchingDirection;
         }
 
-        private static final class Holder {
-            @NonNull
-            private static final Matching INSTANCE = new Matching();
+        @NonNull
+        public Direction getMatchingDirection() {
+            return matchingDirection;
         }
     }
 }

@@ -68,8 +68,12 @@ final class GameMachine {
                 }
                 break;
             case MATCH:
-                if (currentState instanceof GameState.ReadyToPlay || currentState instanceof GameState.Playing) {
-                    subject.onNext(GameState.Matching.getInstance());
+                if (currentState instanceof GameState.ReadyToPlay) {
+                    GameState.ReadyToPlay readyToPlay = (GameState.ReadyToPlay) currentState;
+                    subject.onNext(new GameState.Matching(readyToPlay.getExpectedDirection()));
+                } else if (currentState instanceof GameState.Playing) {
+                    GameState.Playing playing = (GameState.Playing) currentState;
+                    subject.onNext(new GameState.Matching(playing.getExpectedDirection()));
                 }
                 break;
             case MATCHING_FINISHED:
