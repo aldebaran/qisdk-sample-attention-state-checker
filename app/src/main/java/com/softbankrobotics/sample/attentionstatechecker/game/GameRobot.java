@@ -23,6 +23,9 @@ class GameRobot implements RobotLifecycleCallbacks {
 
     private static final String TAG = "GameRobot";
 
+    @NonNull
+    private final Object lock = new Object();
+
     @Nullable
     private QiContext qiContext;
     @Nullable
@@ -68,35 +71,43 @@ class GameRobot implements RobotLifecycleCallbacks {
     }
 
     private void subscribeToDirections(@NonNull Direction expectedDirection) {
-        if (qiContext != null) {
-            this.expectedDirection = expectedDirection;
+        synchronized (lock) {
+            if (qiContext != null && directionDisposable == null) {
+                this.expectedDirection = expectedDirection;
 
-            directionDisposable = new DirectionObservable(qiContext)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .subscribe(this::handleDirection);
+                directionDisposable = new DirectionObservable(qiContext)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(Schedulers.io())
+                        .subscribe(this::handleDirection);
+            }
         }
     }
 
     private void unSubscribeFromDirections() {
-        if (directionDisposable != null && !directionDisposable.isDisposed()) {
-            directionDisposable.dispose();
+        synchronized (lock) {
+            if (directionDisposable != null && !directionDisposable.isDisposed()) {
+                directionDisposable.dispose();
+                directionDisposable = null;
+            }
         }
     }
 
     private void handleGameState(@NonNull GameState gameState) {
-        if (gameState instanceof GameState.Playing) {
-            GameState.Playing playing = (GameState.Playing) gameState;
-            subscribeToDirections(playing.getExpectedDirection());
-        } else {
+        if (gameState instanceof GameState.Idle) {
             unSubscribeFromDirections();
-        }
-
-        if (gameState instanceof GameState.Instructions) {
+        } else if (gameState instanceof GameState.Instructions) {
+            unSubscribeFromDirections();
             GameState.Instructions instructions = (GameState.Instructions) gameState;
             String text = "Look " + instructions.getExpectedDirection();
             say(text).andThenConsume(ignored -> GameMachine.getInstance().postEvent(GameEvent.INSTRUCTIONS_FINISHED));
+        } else if (gameState instanceof GameState.ReadyToPlay) {
+            GameState.ReadyToPlay readyToPlay = (GameState.ReadyToPlay) gameState;
+            subscribeToDirections(readyToPlay.getExpectedDirection());
+        } else if (gameState instanceof GameState.Playing) {
+            GameState.Playing playing = (GameState.Playing) gameState;
+            subscribeToDirections(playing.getExpectedDirection());
         } else if (gameState instanceof GameState.Matching) {
+            unSubscribeFromDirections();
             say("Great!").andThenConsume(ignored -> GameMachine.getInstance().postEvent(GameEvent.MATCHING_FINISHED));
         }
     }
@@ -106,6 +117,8 @@ class GameRobot implements RobotLifecycleCallbacks {
 
         if (direction.equals(expectedDirection)) {
             GameMachine.getInstance().postEvent(GameEvent.MATCH);
+        } else {
+            GameMachine.getInstance().postPlayingEvent(direction);
         }
     }
 

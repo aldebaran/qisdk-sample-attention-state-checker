@@ -64,7 +64,7 @@ final class GameMachine {
                 if (currentState instanceof GameState.Instructions) {
                     GameState.Instructions instructions = (GameState.Instructions) currentState;
                     Direction expectedDirection = instructions.getExpectedDirection();
-                    subject.onNext(new GameState.Playing(expectedDirection));
+                    subject.onNext(new GameState.ReadyToPlay(expectedDirection));
                 }
                 break;
             case MATCH:
@@ -77,6 +77,18 @@ final class GameMachine {
                     subject.onNext(new GameState.Instructions(computeRandomDirection()));
                 }
                 break;
+        }
+    }
+
+    void postPlayingEvent(@NonNull Direction lookDirection) {
+        GameState currentState = subject.getValue();
+
+        if (currentState instanceof GameState.ReadyToPlay) {
+            GameState.ReadyToPlay readyToPlay = (GameState.ReadyToPlay) currentState;
+            subject.onNext(new GameState.Playing(readyToPlay.getExpectedDirection(), lookDirection));
+        } else if (currentState instanceof GameState.Playing) {
+            GameState.Playing playing = (GameState.Playing) currentState;
+            subject.onNext(new GameState.Playing(playing.getExpectedDirection(), lookDirection));
         }
     }
 

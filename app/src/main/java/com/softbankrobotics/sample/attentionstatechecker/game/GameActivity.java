@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.aldebaran.qi.sdk.QiSDK;
@@ -26,14 +27,16 @@ public class GameActivity extends AppCompatActivity {
     @Nullable
     private Disposable gameStateDisposable;
 
-    private TextView directionTextView;
+    private TextView expectedDirectionTextView;
+    private TextView lookDirectionTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        directionTextView = findViewById(R.id.directionTextView);
+        expectedDirectionTextView = findViewById(R.id.expectedDirectionTextView);
+        lookDirectionTextView = findViewById(R.id.lookDirectionTextView);
 
         QiSDK.register(this, gameRobot);
     }
@@ -65,15 +68,23 @@ public class GameActivity extends AppCompatActivity {
 
     private void handleGameState(@NonNull GameState gameState) {
         if (gameState instanceof GameState.Idle) {
-            directionTextView.setText("");
+            expectedDirectionTextView.setText("");
+            lookDirectionTextView.setText("");
         } else if (gameState instanceof GameState.Instructions) {
             GameState.Instructions instructions = (GameState.Instructions) gameState;
-            directionTextView.setText(instructions.getExpectedDirection().toString());
+            expectedDirectionTextView.setText(instructions.getExpectedDirection().toString());
+            lookDirectionTextView.setText("");
+        } else if (gameState instanceof GameState.ReadyToPlay) {
+            GameState.ReadyToPlay readyToPlay = (GameState.ReadyToPlay) gameState;
+            expectedDirectionTextView.setText(readyToPlay.getExpectedDirection().toString());
+            lookDirectionTextView.setText("");
         } else if (gameState instanceof GameState.Playing) {
             GameState.Playing playing = (GameState.Playing) gameState;
-            directionTextView.setText(playing.getExpectedDirection().toString());
+            expectedDirectionTextView.setText(playing.getExpectedDirection().toString());
+            lookDirectionTextView.setText(playing.getLookDirection().toString());
         } else if (gameState instanceof GameState.Matching) {
-            directionTextView.setText("");
+            expectedDirectionTextView.setText("");
+            lookDirectionTextView.setText("");
         }
     }
 }

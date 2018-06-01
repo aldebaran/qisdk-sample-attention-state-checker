@@ -49,19 +49,44 @@ interface GameState {
     }
 
     /**
-     * Game state representing the playing phase.
+     * Game state representing the ready to play phase.
      */
-    final class Playing implements GameState {
+    final class ReadyToPlay implements GameState {
         @NonNull
         private final Direction expectedDirection;
 
-        Playing(@NonNull Direction expectedDirection) {
+        ReadyToPlay(@NonNull Direction expectedDirection) {
             this.expectedDirection = expectedDirection;
         }
 
         @NonNull
         public Direction getExpectedDirection() {
             return expectedDirection;
+        }
+    }
+
+    /**
+     * Game state representing the playing phase.
+     */
+    final class Playing implements GameState {
+        @NonNull
+        private final Direction expectedDirection;
+        @NonNull
+        private final Direction lookDirection;
+
+        Playing(@NonNull Direction expectedDirection, @NonNull Direction lookDirection) {
+            this.expectedDirection = expectedDirection;
+            this.lookDirection = lookDirection;
+        }
+
+        @NonNull
+        public Direction getExpectedDirection() {
+            return expectedDirection;
+        }
+
+        @NonNull
+        public Direction getLookDirection() {
+            return lookDirection;
         }
     }
 
