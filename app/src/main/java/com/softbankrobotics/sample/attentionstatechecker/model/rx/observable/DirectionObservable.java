@@ -35,8 +35,6 @@ public class DirectionObservable extends Observable<Direction> {
                 .subscribeOn(Schedulers.io())
                 .compose(MyOperators::closest)
                 .compose(MyOperators::attentionState)
-                .distinctUntilChanged()
-                .debounce(2, TimeUnit.SECONDS)
                 .compose(MyOperators::direction)
                 .distinctUntilChanged()
                 .filter(direction -> !direction.equals(Direction.UNKNOWN))
