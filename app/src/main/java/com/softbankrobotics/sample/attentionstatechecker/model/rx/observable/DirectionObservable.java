@@ -39,6 +39,7 @@ public class DirectionObservable extends Observable<Direction> {
                 .debounce(2, TimeUnit.SECONDS)
                 .compose(MyOperators::direction)
                 .distinctUntilChanged()
+                .filter(direction -> !direction.equals(Direction.UNKNOWN))
                 .observeOn(Schedulers.io())
                 .subscribe(observer);
     }
