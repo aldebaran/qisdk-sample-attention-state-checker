@@ -33,8 +33,7 @@ final class GameMachine {
 
     private GameMachine() {
         random = new Random();
-        directions = new ArrayList<>(Arrays.asList(Direction.values()));
-        directions.remove(Direction.UNKNOWN);
+        directions = Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT);
         directionsSize = directions.size();
     }
 

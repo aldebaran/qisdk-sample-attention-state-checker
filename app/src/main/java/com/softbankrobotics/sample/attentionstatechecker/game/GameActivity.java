@@ -18,6 +18,9 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * The game activity.
+ */
 public class GameActivity extends AppCompatActivity {
 
     @NonNull

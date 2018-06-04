@@ -11,8 +11,6 @@ import com.aldebaran.qi.sdk.QiContext;
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction;
 import com.softbankrobotics.sample.attentionstatechecker.model.rx.operator.MyOperators;
 
-import java.util.concurrent.TimeUnit;
-
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.schedulers.Schedulers;

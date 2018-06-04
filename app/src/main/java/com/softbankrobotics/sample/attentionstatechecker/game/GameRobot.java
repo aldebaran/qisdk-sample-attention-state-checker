@@ -19,10 +19,15 @@ import com.softbankrobotics.sample.attentionstatechecker.model.rx.observable.Dir
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
+/**
+ * The game robot.
+ */
 class GameRobot implements RobotLifecycleCallbacks {
 
     private static final String TAG = "GameRobot";
 
+    @NonNull
+    private final DirectionsMatcher directionsMatcher = new DirectionsMatcher();
     @NonNull
     private final Object lock = new Object();
 
@@ -120,7 +125,11 @@ class GameRobot implements RobotLifecycleCallbacks {
     private void handleDirection(@NonNull Direction direction) {
         Log.i(TAG, "Look direction: " + direction);
 
-        if (direction.equals(expectedDirection)) {
+        if (expectedDirection == null) {
+            throw new IllegalStateException("No expected direction!");
+        }
+
+        if (directionsMatcher.matches(expectedDirection, direction)) {
             GameMachine.getInstance().postEvent(GameEvent.MATCH);
         } else {
             GameMachine.getInstance().postNotMatchingEvent(direction);
