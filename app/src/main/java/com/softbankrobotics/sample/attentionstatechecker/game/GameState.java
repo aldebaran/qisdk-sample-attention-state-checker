@@ -49,13 +49,13 @@ interface GameState {
     }
 
     /**
-     * Game state representing the ready to play phase.
+     * Game state representing the playing phase.
      */
-    final class ReadyToPlay implements GameState {
+    final class Playing implements GameState {
         @NonNull
         private final Direction expectedDirection;
 
-        ReadyToPlay(@NonNull Direction expectedDirection) {
+        Playing(@NonNull Direction expectedDirection) {
             this.expectedDirection = expectedDirection;
         }
 
@@ -66,15 +66,15 @@ interface GameState {
     }
 
     /**
-     * Game state representing the playing phase.
+     * Game state representing a not matching combination.
      */
-    final class Playing implements GameState {
+    final class NotMatching implements GameState {
         @NonNull
         private final Direction expectedDirection;
         @NonNull
         private final Direction lookDirection;
 
-        Playing(@NonNull Direction expectedDirection, @NonNull Direction lookDirection) {
+        NotMatching(@NonNull Direction expectedDirection, @NonNull Direction lookDirection) {
             this.expectedDirection = expectedDirection;
             this.lookDirection = lookDirection;
         }

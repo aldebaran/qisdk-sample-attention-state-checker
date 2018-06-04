@@ -73,14 +73,14 @@ public class GameActivity extends AppCompatActivity {
             GameState.Instructions instructions = (GameState.Instructions) gameState;
             expectedDirectionTextView.setText(instructions.getExpectedDirection().toString());
             lookDirectionTextView.setText("");
-        } else if (gameState instanceof GameState.ReadyToPlay) {
-            GameState.ReadyToPlay readyToPlay = (GameState.ReadyToPlay) gameState;
-            expectedDirectionTextView.setText(readyToPlay.getExpectedDirection().toString());
-            lookDirectionTextView.setText("");
         } else if (gameState instanceof GameState.Playing) {
             GameState.Playing playing = (GameState.Playing) gameState;
             expectedDirectionTextView.setText(playing.getExpectedDirection().toString());
-            lookDirectionTextView.setText(playing.getLookDirection().toString());
+            lookDirectionTextView.setText("");
+        } else if (gameState instanceof GameState.NotMatching) {
+            GameState.NotMatching notMatching = (GameState.NotMatching) gameState;
+            expectedDirectionTextView.setText(notMatching.getExpectedDirection().toString());
+            lookDirectionTextView.setText(notMatching.getLookDirection().toString());
         } else if (gameState instanceof GameState.Matching) {
             GameState.Matching matching = (GameState.Matching) gameState;
             expectedDirectionTextView.setText(matching.getMatchingDirection().toString());

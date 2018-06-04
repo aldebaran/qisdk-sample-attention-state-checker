@@ -64,14 +64,11 @@ final class GameMachine {
                 if (currentState instanceof GameState.Instructions) {
                     GameState.Instructions instructions = (GameState.Instructions) currentState;
                     Direction expectedDirection = instructions.getExpectedDirection();
-                    subject.onNext(new GameState.ReadyToPlay(expectedDirection));
+                    subject.onNext(new GameState.Playing(expectedDirection));
                 }
                 break;
             case MATCH:
-                if (currentState instanceof GameState.ReadyToPlay) {
-                    GameState.ReadyToPlay readyToPlay = (GameState.ReadyToPlay) currentState;
-                    subject.onNext(new GameState.Matching(readyToPlay.getExpectedDirection()));
-                } else if (currentState instanceof GameState.Playing) {
+                if (currentState instanceof GameState.Playing) {
                     GameState.Playing playing = (GameState.Playing) currentState;
                     subject.onNext(new GameState.Matching(playing.getExpectedDirection()));
                 }
@@ -81,18 +78,21 @@ final class GameMachine {
                     subject.onNext(new GameState.Instructions(computeRandomDirection()));
                 }
                 break;
+            case NOT_MATCHING_FINISHED:
+                if (currentState instanceof GameState.NotMatching) {
+                    GameState.NotMatching notMatching = (GameState.NotMatching) currentState;
+                    subject.onNext(new GameState.Playing(notMatching.getExpectedDirection()));
+                }
+                break;
         }
     }
 
-    void postPlayingEvent(@NonNull Direction lookDirection) {
+    void postNotMatchingEvent(@NonNull Direction lookDirection) {
         GameState currentState = subject.getValue();
 
-        if (currentState instanceof GameState.ReadyToPlay) {
-            GameState.ReadyToPlay readyToPlay = (GameState.ReadyToPlay) currentState;
-            subject.onNext(new GameState.Playing(readyToPlay.getExpectedDirection(), lookDirection));
-        } else if (currentState instanceof GameState.Playing) {
+        if (currentState instanceof GameState.Playing) {
             GameState.Playing playing = (GameState.Playing) currentState;
-            subject.onNext(new GameState.Playing(playing.getExpectedDirection(), lookDirection));
+            subject.onNext(new GameState.NotMatching(playing.getExpectedDirection(), lookDirection));
         }
     }
 

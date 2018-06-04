@@ -100,12 +100,14 @@ class GameRobot implements RobotLifecycleCallbacks {
             GameState.Instructions instructions = (GameState.Instructions) gameState;
             String text = "Look " + instructions.getExpectedDirection();
             say(text).andThenConsume(ignored -> GameMachine.getInstance().postEvent(GameEvent.INSTRUCTIONS_FINISHED));
-        } else if (gameState instanceof GameState.ReadyToPlay) {
-            GameState.ReadyToPlay readyToPlay = (GameState.ReadyToPlay) gameState;
-            subscribeToDirections(readyToPlay.getExpectedDirection());
         } else if (gameState instanceof GameState.Playing) {
             GameState.Playing playing = (GameState.Playing) gameState;
             subscribeToDirections(playing.getExpectedDirection());
+        } else if (gameState instanceof GameState.NotMatching) {
+            unSubscribeFromDirections();
+            GameState.NotMatching notMatching = (GameState.NotMatching) gameState;
+            String text = "Don't look " + notMatching.getLookDirection() + ", look " + notMatching.getExpectedDirection();
+            say(text).andThenConsume(ignored -> GameMachine.getInstance().postEvent(GameEvent.NOT_MATCHING_FINISHED));
         } else if (gameState instanceof GameState.Matching) {
             unSubscribeFromDirections();
             say("Great!").andThenConsume(ignored -> GameMachine.getInstance().postEvent(GameEvent.MATCHING_FINISHED));
@@ -118,7 +120,7 @@ class GameRobot implements RobotLifecycleCallbacks {
         if (direction.equals(expectedDirection)) {
             GameMachine.getInstance().postEvent(GameEvent.MATCH);
         } else {
-            GameMachine.getInstance().postPlayingEvent(direction);
+            GameMachine.getInstance().postNotMatchingEvent(direction);
         }
     }
 
