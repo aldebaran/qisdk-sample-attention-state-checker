@@ -11,6 +11,7 @@ package com.softbankrobotics.sample.attentionstatechecker.game;
 enum GameEvent {
     FOCUS_GAINED,
     FOCUS_LOST,
+    INTRO_FINISHED,
     INSTRUCTIONS_FINISHED,
     MATCH,
     MATCHING_FINISHED,

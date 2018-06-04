@@ -54,6 +54,11 @@ final class GameMachine {
         switch (gameEvent) {
             case FOCUS_GAINED:
                 if (currentState instanceof GameState.Idle) {
+                    subject.onNext(GameState.Intro.getInstance());
+                }
+                break;
+            case INTRO_FINISHED:
+                if (currentState instanceof GameState.Intro) {
                     subject.onNext(new GameState.Instructions(computeRandomDirection()));
                 }
                 break;

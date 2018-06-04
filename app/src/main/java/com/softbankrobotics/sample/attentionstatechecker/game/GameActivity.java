@@ -66,7 +66,7 @@ public class GameActivity extends AppCompatActivity {
     }
 
     private void handleGameState(@NonNull GameState gameState) {
-        if (gameState instanceof GameState.Idle) {
+        if (gameState instanceof GameState.Idle || gameState instanceof GameState.Intro) {
             expectedDirectionTextView.setText("");
             lookDirectionTextView.setText("");
         } else if (gameState instanceof GameState.Instructions) {

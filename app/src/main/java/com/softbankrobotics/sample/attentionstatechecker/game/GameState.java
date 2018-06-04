@@ -32,6 +32,23 @@ interface GameState {
     }
 
     /**
+     * The intro state.
+     */
+    final class Intro implements GameState {
+        private Intro() {}
+
+        @NonNull
+        static Intro getInstance() {
+            return Holder.INSTANCE;
+        }
+
+        private static final class Holder {
+            @NonNull
+            private static final Intro INSTANCE = new Intro();
+        }
+    }
+
+    /**
      * Game state representing the instruction phase.
      */
     final class Instructions implements GameState {

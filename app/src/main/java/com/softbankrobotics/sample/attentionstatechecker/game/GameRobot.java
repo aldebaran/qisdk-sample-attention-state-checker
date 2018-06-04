@@ -95,6 +95,9 @@ class GameRobot implements RobotLifecycleCallbacks {
     private void handleGameState(@NonNull GameState gameState) {
         if (gameState instanceof GameState.Idle) {
             unSubscribeFromDirections();
+        } else if (gameState instanceof GameState.Intro) {
+            unSubscribeFromDirections();
+            say("Follow my instructions by looking where I tell you to").andThenConsume(ignored -> GameMachine.getInstance().postEvent(GameEvent.INTRO_FINISHED));
         } else if (gameState instanceof GameState.Instructions) {
             unSubscribeFromDirections();
             GameState.Instructions instructions = (GameState.Instructions) gameState;
