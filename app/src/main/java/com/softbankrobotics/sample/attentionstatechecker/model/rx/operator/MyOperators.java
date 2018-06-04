@@ -67,6 +67,14 @@ public final class MyOperators {
                     return Direction.LEFT;
                 case LOOKING_RIGHT:
                     return Direction.RIGHT;
+                case LOOKING_UP_LEFT:
+                    return Direction.UP_LEFT;
+                case LOOKING_UP_RIGHT:
+                    return Direction.UP_RIGHT;
+                case LOOKING_DOWN_LEFT:
+                    return Direction.DOWN_LEFT;
+                case LOOKING_DOWN_RIGHT:
+                    return Direction.DOWN_RIGHT;
                 default:
                     return Direction.UNKNOWN;
             }
