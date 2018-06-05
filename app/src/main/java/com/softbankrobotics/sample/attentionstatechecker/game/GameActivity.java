@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.aldebaran.qi.sdk.QiSDK;
@@ -68,6 +69,14 @@ public class GameActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
+        }
+    }
+
     private void handleGameState(@NonNull GameState gameState) {
         if (gameState instanceof GameState.Idle || gameState instanceof GameState.Intro) {
             expectedDirectionTextView.setText("");
@@ -89,5 +98,16 @@ public class GameActivity extends AppCompatActivity {
             expectedDirectionTextView.setText(matching.getMatchingDirection().toString());
             lookDirectionTextView.setText(matching.getMatchingDirection().toString());
         }
+    }
+
+    private void hideSystemUI() {
+        View decorView = getWindow().getDecorView();
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 }
