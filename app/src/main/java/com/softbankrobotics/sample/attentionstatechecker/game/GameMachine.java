@@ -29,7 +29,7 @@ final class GameMachine {
     private final int directionsSize;
 
     @NonNull
-    private final BehaviorSubject<GameState> subject = BehaviorSubject.createDefault(GameState.Idle.getInstance());
+    private final BehaviorSubject<GameState> subject = BehaviorSubject.createDefault(GameState.Idle.INSTANCE);
 
     private GameMachine() {
         random = new Random();
@@ -53,7 +53,7 @@ final class GameMachine {
         switch (gameEvent) {
             case FOCUS_GAINED:
                 if (currentState instanceof GameState.Idle) {
-                    subject.onNext(GameState.Intro.getInstance());
+                    subject.onNext(GameState.Intro.INSTANCE);
                 }
                 break;
             case INTRO_FINISHED:
@@ -62,7 +62,7 @@ final class GameMachine {
                 }
                 break;
             case FOCUS_LOST:
-                subject.onNext(GameState.Idle.getInstance());
+                subject.onNext(GameState.Idle.INSTANCE);
                 break;
             case INSTRUCTIONS_FINISHED:
                 if (currentState instanceof GameState.Instructions) {
