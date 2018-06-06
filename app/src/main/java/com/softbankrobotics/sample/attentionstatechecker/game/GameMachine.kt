@@ -6,13 +6,9 @@
 package com.softbankrobotics.sample.attentionstatechecker.game
 
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
-
-import java.util.ArrayList
-import java.util.Arrays
-import java.util.Random
-
 import io.reactivex.Observable
 import io.reactivex.subjects.BehaviorSubject
+import java.util.*
 
 /**
  * The game machine.
@@ -31,33 +27,28 @@ internal object GameMachine {
         val currentState = subject.value
 
         when (gameEvent) {
-            GameEvent.FOCUS_GAINED -> if (currentState === GameState.Idle) {
+            is GameEvent.FocusGained -> if (currentState === GameState.Idle) {
                 subject.onNext(GameState.Intro)
             }
-            GameEvent.INTRO_FINISHED -> if (currentState === GameState.Intro) {
+            is GameEvent.FocusLost -> subject.onNext(GameState.Idle)
+            is GameEvent.IntroFinished -> if (currentState === GameState.Intro) {
                 subject.onNext(GameState.Instructions(computeRandomDirection()))
             }
-            GameEvent.FOCUS_LOST -> subject.onNext(GameState.Idle)
-            GameEvent.INSTRUCTIONS_FINISHED -> if (currentState is GameState.Instructions) {
+            is GameEvent.InstructionsFinished -> if (currentState is GameState.Instructions) {
                 subject.onNext(GameState.Playing(currentState.expectedDirection))
             }
-            GameEvent.MATCH -> if (currentState is GameState.Playing) {
+            is GameEvent.Match -> if (currentState is GameState.Playing) {
                 subject.onNext(GameState.Matching(currentState.expectedDirection))
             }
-            GameEvent.MATCHING_FINISHED -> if (currentState is GameState.Matching) {
+            is GameEvent.NotMatch -> if (currentState is GameState.Playing) {
+                subject.onNext(GameState.NotMatching(currentState.expectedDirection, gameEvent.lookDirection))
+            }
+            is GameEvent.MatchingFinished -> if (currentState is GameState.Matching) {
                 subject.onNext(GameState.Instructions(computeRandomDirection()))
             }
-            GameEvent.NOT_MATCHING_FINISHED -> if (currentState is GameState.NotMatching) {
+            is GameEvent.NotMatchingFinished -> if (currentState is GameState.NotMatching) {
                 subject.onNext(GameState.Playing(currentState.expectedDirection))
             }
-        }
-    }
-
-    fun postNotMatchingEvent(lookDirection: Direction) {
-        val currentState = subject.value
-
-        if (currentState is GameState.Playing) {
-            subject.onNext(GameState.NotMatching(currentState.expectedDirection, lookDirection))
         }
     }
 

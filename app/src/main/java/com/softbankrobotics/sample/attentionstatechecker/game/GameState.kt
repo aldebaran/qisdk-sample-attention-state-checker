@@ -1,3 +1,8 @@
+/*
+ * Copyright (C) 2018 Softbank Robotics Europe
+ * See COPYING for the license
+ */
+
 package com.softbankrobotics.sample.attentionstatechecker.game
 
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
@@ -6,7 +11,6 @@ import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
  * A game state.
  */
 internal sealed class GameState {
-
     object Idle : GameState()
     object Intro : GameState()
     data class Instructions(val expectedDirection: Direction) : GameState()

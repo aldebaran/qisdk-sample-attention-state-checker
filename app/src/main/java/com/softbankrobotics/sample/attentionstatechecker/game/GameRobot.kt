@@ -31,7 +31,7 @@ internal class GameRobot : RobotLifecycleCallbacks {
         this.qiContext = qiContext
         subscribeToGameState()
 
-        GameMachine.postEvent(GameEvent.FOCUS_GAINED)
+        GameMachine.postEvent(GameEvent.FocusGained)
     }
 
     override fun onRobotFocusLost() {
@@ -39,7 +39,7 @@ internal class GameRobot : RobotLifecycleCallbacks {
         unSubscribeFromDirections()
         this.qiContext = null
 
-        GameMachine.postEvent(GameEvent.FOCUS_LOST)
+        GameMachine.postEvent(GameEvent.FocusLost)
     }
 
     override fun onRobotFocusRefused(reason: String) {
@@ -86,19 +86,19 @@ internal class GameRobot : RobotLifecycleCallbacks {
 
         when (gameState) {
             is GameState.Intro -> {
-                say("Follow my instructions by looking where I tell you to").andThenConsume { GameMachine.postEvent(GameEvent.INTRO_FINISHED) }
+                say("Follow my instructions by looking where I tell you to").andThenConsume { GameMachine.postEvent(GameEvent.IntroFinished) }
             }
             is GameState.Instructions -> {
                 val text = "Look ${gameState.expectedDirection}"
-                say(text).andThenConsume { GameMachine.postEvent(GameEvent.INSTRUCTIONS_FINISHED) }
+                say(text).andThenConsume { GameMachine.postEvent(GameEvent.InstructionsFinished) }
             }
             is GameState.NotMatching -> {
                 val (expectedDirection, lookDirection) = gameState
                 val text = "Don't look $lookDirection, look $expectedDirection"
-                say(text).andThenConsume { GameMachine.postEvent(GameEvent.NOT_MATCHING_FINISHED) }
+                say(text).andThenConsume { GameMachine.postEvent(GameEvent.NotMatchingFinished) }
             }
             is GameState.Matching -> {
-                say("Great!").andThenConsume { GameMachine.postEvent(GameEvent.MATCHING_FINISHED) }
+                say("Great!").andThenConsume { GameMachine.postEvent(GameEvent.MatchingFinished) }
             }
         }
     }
@@ -107,9 +107,9 @@ internal class GameRobot : RobotLifecycleCallbacks {
         val expectedDirection = expectedDirection ?: throw IllegalStateException("No expected direction!")
 
         if (directionsMatcher.matches(expectedDirection, direction)) {
-            GameMachine.postEvent(GameEvent.MATCH)
+            GameMachine.postEvent(GameEvent.Match)
         } else {
-            GameMachine.postNotMatchingEvent(direction)
+            GameMachine.postEvent(GameEvent.NotMatch(direction))
         }
     }
 
