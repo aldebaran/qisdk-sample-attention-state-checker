@@ -3,12 +3,12 @@
  * See COPYING for the license
  */
 
-package com.softbankrobotics.sample.attentionstatechecker.model.data;
+package com.softbankrobotics.sample.attentionstatechecker.model.data
 
 /**
  * Enumeration representing a direction.
  */
-public enum Direction {
+enum class Direction {
     UNKNOWN,
     UP,
     DOWN,
@@ -17,5 +17,5 @@ public enum Direction {
     UP_LEFT,
     UP_RIGHT,
     DOWN_LEFT,
-    DOWN_RIGHT,
+    DOWN_RIGHT
 }
