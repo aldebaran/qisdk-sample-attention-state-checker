@@ -49,7 +49,7 @@ class GameActivity : RobotActivity() {
     override fun onResume() {
         super.onResume()
 
-        gameStateDisposable = GameMachine.getInstance().gameState()
+        gameStateDisposable = GameMachine.gameState()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(this::handleGameState)
