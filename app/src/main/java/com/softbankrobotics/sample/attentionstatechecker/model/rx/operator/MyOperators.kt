@@ -22,7 +22,7 @@ fun closest(observable: Observable<List<HumanData>>): Observable<Wrapper<HumanDa
         if (min != null) {
             Wrapper.of(min)
         } else {
-            Wrapper.empty<HumanData>()
+            Wrapper.empty()
         }
     }
 }
@@ -32,7 +32,7 @@ fun attentionState(observable: Observable<Wrapper<HumanData>>): Observable<Wrapp
         if (wrapper.hasContent()) {
             Wrapper.of(wrapper.content.attentionState)
         } else {
-            Wrapper.empty<AttentionState>()
+            Wrapper.empty()
         }
     }
 }
