@@ -14,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aldebaran.qi.sdk.QiSDK;
+import com.aldebaran.qi.sdk.design.activity.RobotActivity;
+import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayStrategy;
 import com.softbankrobotics.sample.attentionstatechecker.R;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -23,7 +25,7 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * The game activity.
  */
-public class GameActivity extends AppCompatActivity {
+public class GameActivity extends RobotActivity {
 
     @NonNull
     private final GameRobot gameRobot = new GameRobot();
@@ -38,6 +40,8 @@ public class GameActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setSpeechBarDisplayStrategy(SpeechBarDisplayStrategy.OVERLAY);
         setContentView(R.layout.activity_game);
 
         expectedDirectionTextView = findViewById(R.id.expectedDirectionTextView);
