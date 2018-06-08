@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AttentionStateChecker</string>
+    <string name="look_instruction">LOOK %1$s</string>
+    <string name="question_mark">\?</string>
 </resources>

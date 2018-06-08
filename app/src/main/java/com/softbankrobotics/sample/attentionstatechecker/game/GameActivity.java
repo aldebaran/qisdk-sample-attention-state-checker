@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.aldebaran.qi.sdk.QiSDK;
@@ -32,6 +33,7 @@ public class GameActivity extends AppCompatActivity {
 
     private TextView expectedDirectionTextView;
     private TextView lookDirectionTextView;
+    private ImageView humanImageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,7 @@ public class GameActivity extends AppCompatActivity {
 
         expectedDirectionTextView = findViewById(R.id.expectedDirectionTextView);
         lookDirectionTextView = findViewById(R.id.lookDirectionTextView);
+        humanImageView = findViewById(R.id.humanImageView);
 
         QiSDK.register(this, gameRobot);
     }
@@ -81,22 +84,27 @@ public class GameActivity extends AppCompatActivity {
         if (gameState instanceof GameState.Idle || gameState instanceof GameState.Intro) {
             expectedDirectionTextView.setText("");
             lookDirectionTextView.setText("");
+            humanImageView.setVisibility(View.INVISIBLE);
         } else if (gameState instanceof GameState.Instructions) {
             GameState.Instructions instructions = (GameState.Instructions) gameState;
-            expectedDirectionTextView.setText(instructions.getExpectedDirection().toString());
+            expectedDirectionTextView.setText(getString(R.string.look_instruction, instructions.getExpectedDirection().toString()));
             lookDirectionTextView.setText("");
+            humanImageView.setVisibility(View.INVISIBLE);
         } else if (gameState instanceof GameState.Playing) {
             GameState.Playing playing = (GameState.Playing) gameState;
-            expectedDirectionTextView.setText(playing.getExpectedDirection().toString());
-            lookDirectionTextView.setText("");
+            expectedDirectionTextView.setText(getString(R.string.look_instruction, playing.getExpectedDirection().toString()));
+            lookDirectionTextView.setText(R.string.question_mark);
+            humanImageView.setVisibility(View.VISIBLE);
         } else if (gameState instanceof GameState.NotMatching) {
             GameState.NotMatching notMatching = (GameState.NotMatching) gameState;
-            expectedDirectionTextView.setText(notMatching.getExpectedDirection().toString());
+            expectedDirectionTextView.setText(getString(R.string.look_instruction, notMatching.getExpectedDirection().toString()));
             lookDirectionTextView.setText(notMatching.getLookDirection().toString());
+            humanImageView.setVisibility(View.VISIBLE);
         } else if (gameState instanceof GameState.Matching) {
             GameState.Matching matching = (GameState.Matching) gameState;
-            expectedDirectionTextView.setText(matching.getMatchingDirection().toString());
+            expectedDirectionTextView.setText(getString(R.string.look_instruction, matching.getMatchingDirection().toString()));
             lookDirectionTextView.setText(matching.getMatchingDirection().toString());
+            humanImageView.setVisibility(View.VISIBLE);
         }
     }
 
