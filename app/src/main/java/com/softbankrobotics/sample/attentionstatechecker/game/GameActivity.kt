@@ -6,18 +6,15 @@
 package com.softbankrobotics.sample.attentionstatechecker.game
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
 import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayStrategy
 import com.softbankrobotics.sample.attentionstatechecker.R
-
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
 /**
@@ -27,7 +24,7 @@ class GameActivity : RobotActivity() {
 
     private val gameRobot = GameRobot()
 
-    private var gameStateDisposable: Disposable? = null
+    private val disposables = CompositeDisposable()
 
     private lateinit var expectedDirectionTextView: TextView
     private lateinit var lookDirectionTextView: TextView
@@ -48,16 +45,14 @@ class GameActivity : RobotActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        gameStateDisposable = GameMachine.gameState()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(this::handleGameState)
+        disposables.add(GameMachine.gameState()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(this::handleGameState))
     }
 
     override fun onPause() {
-        gameStateDisposable?.takeUnless { it.isDisposed }?.dispose()
-
+        disposables.clear()
         super.onPause()
     }
 
