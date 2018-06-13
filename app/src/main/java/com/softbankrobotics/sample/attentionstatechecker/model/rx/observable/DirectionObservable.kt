@@ -19,7 +19,7 @@ import io.reactivex.schedulers.Schedulers
 class DirectionObservable(private val qiContext: QiContext) : Observable<Direction>() {
 
     override fun subscribeActual(observer: Observer<in Direction>) {
-        MyHumanDataListObservable(qiContext)
+        humanDataListObservable(qiContext)
                 .subscribeOn(Schedulers.io())
                 .closest()
                 .attentionState()
