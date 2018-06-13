@@ -22,7 +22,9 @@ import io.reactivex.schedulers.Schedulers
  */
 class GameActivity : RobotActivity() {
 
-    private val gameRobot = GameRobot()
+    private val gameMachine = GameMachine()
+
+    private val gameRobot = GameRobot(gameMachine)
 
     private val disposables = CompositeDisposable()
 
@@ -45,7 +47,7 @@ class GameActivity : RobotActivity() {
 
     override fun onResume() {
         super.onResume()
-        disposables.add(GameMachine.gameState()
+        disposables.add(gameMachine.gameState()
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::handleGameState))

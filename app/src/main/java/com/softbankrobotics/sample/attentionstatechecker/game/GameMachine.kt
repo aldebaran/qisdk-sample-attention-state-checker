@@ -11,9 +11,9 @@ import io.reactivex.subjects.BehaviorSubject
 import java.util.*
 
 /**
- * The game machine.
+ * A game machine.
  */
-internal object GameMachine {
+internal class GameMachine {
 
     private val random = Random()
     private val directions = Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)
