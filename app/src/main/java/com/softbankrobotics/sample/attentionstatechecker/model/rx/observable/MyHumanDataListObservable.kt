@@ -11,6 +11,7 @@ import com.aldebaran.qi.sdk.`object`.human.AttentionState
 import com.aldebaran.qi.sdk.`object`.human.Human
 import com.aldebaran.qi.sdk.`object`.humanawareness.HumanAwareness
 import com.softbankrobotics.sample.attentionstatechecker.model.data.HumanData
+import com.softbankrobotics.sample.attentionstatechecker.utils.distanceFrom
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -134,15 +135,8 @@ class MyHumanDataListObservable(private val qiContext: QiContext) : Observable<L
             Observable.interval(1, TimeUnit.SECONDS)
                     .subscribeOn(Schedulers.io())
                     .observeOn(Schedulers.io())
-                    .map { _ -> distance(humanFrame, robotFrame) }
+                    .map { _ -> humanFrame.distanceFrom(robotFrame) }
                     .subscribe(observer)
-        }
-
-        private fun distance(frameA: Frame, frameB: Frame): Double {
-            val translation = frameA.computeTransform(frameB).transform.translation
-            val x = translation.x
-            val y = translation.y
-            return Math.sqrt(x * x + y * y)
         }
     }
 
