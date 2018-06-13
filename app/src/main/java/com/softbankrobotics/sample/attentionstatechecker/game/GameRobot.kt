@@ -10,7 +10,7 @@ import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
 import com.aldebaran.qi.sdk.builder.SayBuilder
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
-import com.softbankrobotics.sample.attentionstatechecker.model.rx.observable.DirectionObservable
+import com.softbankrobotics.sample.attentionstatechecker.utils.directionObservable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 
@@ -62,7 +62,7 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
             qiContext?.takeIf { directionDisposable == null }?.let { context ->
                 this.expectedDirection = expectedDirection
 
-                directionDisposable = DirectionObservable(context)
+                directionDisposable = directionObservable(context)
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
                         .subscribe(this::handleDirection)
