@@ -21,9 +21,9 @@ class DirectionObservable(private val qiContext: QiContext) : Observable<Directi
     override fun subscribeActual(observer: Observer<in Direction>) {
         MyHumanDataListObservable(qiContext)
                 .subscribeOn(Schedulers.io())
-                .compose { closest(it) }
-                .compose { attentionState(it) }
-                .compose { direction(it) }
+                .closest()
+                .attentionState()
+                .direction()
                 .distinctUntilChanged()
                 .filter { direction -> direction != Direction.UNKNOWN }
                 .observeOn(Schedulers.io())

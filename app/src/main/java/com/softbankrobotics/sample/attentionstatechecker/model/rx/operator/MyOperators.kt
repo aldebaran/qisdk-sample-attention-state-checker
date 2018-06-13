@@ -15,8 +15,8 @@ import com.softbankrobotics.sample.attentionstatechecker.model.data.HumanData
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Wrapper
 import io.reactivex.Observable
 
-fun closest(observable: Observable<List<HumanData>>): Observable<Wrapper<HumanData>> {
-    return observable.map { humanDataList ->
+fun Observable<List<HumanData>>.closest(): Observable<Wrapper<HumanData>> {
+    return map { humanDataList ->
         val min = humanDataList.minBy { it.distance }
 
         if (min != null) {
@@ -27,8 +27,8 @@ fun closest(observable: Observable<List<HumanData>>): Observable<Wrapper<HumanDa
     }
 }
 
-fun attentionState(observable: Observable<Wrapper<HumanData>>): Observable<Wrapper<AttentionState>> {
-    return observable.map { wrapper ->
+fun Observable<Wrapper<HumanData>>.attentionState(): Observable<Wrapper<AttentionState>> {
+    return map { wrapper ->
         if (wrapper.content != null) {
             Wrapper.of(wrapper.content.attentionState)
         } else {
@@ -37,8 +37,8 @@ fun attentionState(observable: Observable<Wrapper<HumanData>>): Observable<Wrapp
     }
 }
 
-fun direction(observable: Observable<Wrapper<AttentionState>>): Observable<Direction> {
-    return observable.map { wrapper ->
+fun Observable<Wrapper<AttentionState>>.direction(): Observable<Direction> {
+    return map { wrapper ->
         if (wrapper.content == null) {
             return@map Direction.UNKNOWN
         }
