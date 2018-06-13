@@ -29,7 +29,7 @@ fun closest(observable: Observable<List<HumanData>>): Observable<Wrapper<HumanDa
 
 fun attentionState(observable: Observable<Wrapper<HumanData>>): Observable<Wrapper<AttentionState>> {
     return observable.map { wrapper ->
-        if (wrapper.hasContent()) {
+        if (wrapper.content != null) {
             Wrapper.of(wrapper.content.attentionState)
         } else {
             Wrapper.empty()
@@ -39,7 +39,7 @@ fun attentionState(observable: Observable<Wrapper<HumanData>>): Observable<Wrapp
 
 fun direction(observable: Observable<Wrapper<AttentionState>>): Observable<Direction> {
     return observable.map { wrapper ->
-        if (!wrapper.hasContent()) {
+        if (wrapper.content == null) {
             return@map Direction.UNKNOWN
         }
 

@@ -13,26 +13,19 @@ import java.util.*
 </T> */
 class Wrapper<out T : Any> {
 
-    private val _content: T?
-
-    val content: T
-        get() = _content ?: throw NoSuchElementException("No content present")
+    val content: T?
 
     private constructor() {
-        this._content = null
+        this.content = null
     }
 
     private constructor(content: T) {
-        this._content = content
-    }
-
-    fun hasContent(): Boolean {
-        return _content != null
+        this.content = content
     }
 
     override fun toString(): String {
-        return if (_content != null)
-            String.format("Wrapper[%s]", _content)
+        return if (content != null)
+            String.format("Wrapper[%s]", content)
         else
             "Wrapper.empty"
     }
@@ -46,11 +39,11 @@ class Wrapper<out T : Any> {
             return false
         }
 
-        return _content == other._content
+        return content == other.content
     }
 
     override fun hashCode(): Int {
-        return Objects.hashCode(_content)
+        return Objects.hashCode(content)
     }
 
     companion object {
