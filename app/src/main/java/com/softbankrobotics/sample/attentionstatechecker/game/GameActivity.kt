@@ -13,6 +13,7 @@ import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
 import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayStrategy
 import com.softbankrobotics.sample.attentionstatechecker.R
+import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -73,31 +74,59 @@ class GameActivity : RobotActivity() {
     private fun handleGameState(gameState: GameState) {
         when (gameState) {
             is GameState.Idle, is GameState.Intro -> {
-                expectedDirectionTextView.text = ""
-                lookDirectionTextView.text = ""
-                humanImageView.visibility = View.INVISIBLE
+                hideExpectedDirection()
+                hideLookDirection()
+                hideHuman()
             }
             is GameState.Instructions -> {
-                expectedDirectionTextView.text = getString(R.string.look_instruction, gameState.expectedDirection.toString())
-                lookDirectionTextView.text = ""
-                humanImageView.visibility = View.INVISIBLE
+                showExpectedDirection(gameState.expectedDirection)
+                hideLookDirection()
+                hideHuman()
             }
             is GameState.Playing -> {
-                expectedDirectionTextView.text = getString(R.string.look_instruction, gameState.expectedDirection.toString())
-                lookDirectionTextView.text = getString(R.string.question_mark)
-                humanImageView.visibility = View.VISIBLE
+                showExpectedDirection(gameState.expectedDirection)
+                showWaitingForLookDirection()
+                showHuman()
             }
             is GameState.NotMatching -> {
-                expectedDirectionTextView.text = getString(R.string.look_instruction, gameState.expectedDirection.toString())
-                lookDirectionTextView.text = gameState.lookDirection.toString()
-                humanImageView.visibility = View.VISIBLE
+                showExpectedDirection(gameState.expectedDirection)
+                showLookDirection(gameState.lookDirection)
+                showHuman()
             }
             is GameState.Matching -> {
-                expectedDirectionTextView.text = getString(R.string.look_instruction, gameState.matchingDirection.toString())
-                lookDirectionTextView.text = gameState.matchingDirection.toString()
-                humanImageView.visibility = View.VISIBLE
+                showExpectedDirection(gameState.matchingDirection)
+                showLookDirection(gameState.matchingDirection)
+                showHuman()
             }
         }
+    }
+
+    private fun hideExpectedDirection() {
+        expectedDirectionTextView.text = ""
+    }
+
+    private fun showExpectedDirection(direction: Direction) {
+        expectedDirectionTextView.text = getString(R.string.look_instruction, direction.toString())
+    }
+
+    private fun hideLookDirection() {
+        lookDirectionTextView.text = ""
+    }
+
+    private fun showLookDirection(direction: Direction) {
+        lookDirectionTextView.text = direction.toString()
+    }
+
+    private fun showWaitingForLookDirection() {
+        lookDirectionTextView.text = getString(R.string.question_mark)
+    }
+
+    private fun hideHuman() {
+        humanImageView.visibility = View.INVISIBLE
+    }
+
+    private fun showHuman() {
+        humanImageView.visibility = View.VISIBLE
     }
 
     private fun hideSystemUI() {
