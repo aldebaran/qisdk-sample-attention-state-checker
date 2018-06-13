@@ -11,7 +11,7 @@ import com.aldebaran.qi.sdk.`object`.human.AttentionState
 import com.aldebaran.qi.sdk.`object`.human.Human
 import com.aldebaran.qi.sdk.`object`.humanawareness.HumanAwareness
 import com.softbankrobotics.sample.attentionstatechecker.model.data.HumanData
-import com.softbankrobotics.sample.attentionstatechecker.utils.distanceFrom
+import com.softbankrobotics.sample.attentionstatechecker.utils.distanceObservableFrom
 import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.disposables.Disposable
@@ -60,7 +60,7 @@ class MyHumanDataListObservable(private val qiContext: QiContext) : Observable<L
     private fun humanDataObservable(human: Human, robotFrame: Frame): Observable<HumanData> {
         // Create observables from the Human.
         val attentionStateObservable = AttentionStateObservable(human)
-        val distanceObservable = DistanceObservable(human.headFrame, robotFrame)
+        val distanceObservable = human.headFrame.distanceObservableFrom(robotFrame)
 
         // Combine these observable into an observable of HumanData.
         return humanDataObservable(human, attentionStateObservable, distanceObservable)
@@ -117,26 +117,6 @@ class MyHumanDataListObservable(private val qiContext: QiContext) : Observable<L
             override fun isDisposed(): Boolean {
                 return unSubscribed.get()
             }
-        }
-    }
-
-    /**
-     * Observable providing the distance between a [Human] and the robot, using the human and robot frames.
-     *
-     * <br></br>
-     *
-     * Note: Code inspired from Jake Wharton's [RxBinding](https://github.com/JakeWharton/RxBinding) library
-     * to convert listeners into observables.
-     */
-    private class DistanceObservable(private val humanFrame: Frame, private val robotFrame: Frame) : Observable<Double>() {
-
-        override fun subscribeActual(observer: Observer<in Double>) {
-            // Compute the distance every second.
-            Observable.interval(1, TimeUnit.SECONDS)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(Schedulers.io())
-                    .map { _ -> humanFrame.distanceFrom(robotFrame) }
-                    .subscribe(observer)
         }
     }
 
