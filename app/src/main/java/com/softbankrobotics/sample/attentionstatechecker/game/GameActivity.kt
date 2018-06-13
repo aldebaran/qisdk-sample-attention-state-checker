@@ -7,8 +7,6 @@ package com.softbankrobotics.sample.attentionstatechecker.game
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
 import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayStrategy
@@ -17,6 +15,7 @@ import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_game.*
 
 /**
  * The game activity.
@@ -29,19 +28,11 @@ class GameActivity : RobotActivity() {
 
     private val disposables = CompositeDisposable()
 
-    private lateinit var expectedDirectionTextView: TextView
-    private lateinit var lookDirectionTextView: TextView
-    private lateinit var humanImageView: ImageView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setSpeechBarDisplayStrategy(SpeechBarDisplayStrategy.OVERLAY)
         setContentView(R.layout.activity_game)
-
-        expectedDirectionTextView = findViewById(R.id.expectedDirectionTextView)
-        lookDirectionTextView = findViewById(R.id.lookDirectionTextView)
-        humanImageView = findViewById(R.id.humanImageView)
 
         QiSDK.register(this, gameRobot)
     }
