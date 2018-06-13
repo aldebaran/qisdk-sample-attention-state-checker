@@ -5,46 +5,11 @@
 
 package com.softbankrobotics.sample.attentionstatechecker.model.data
 
-import java.util.*
-
 /**
  * Wrap an object. Can be empty.
  * @param <T> The object type.
-</T> */
-class Wrapper<out T : Any> {
-
-    val content: T?
-
-    private constructor() {
-        this.content = null
-    }
-
-    private constructor(content: T) {
-        this.content = content
-    }
-
-    override fun toString(): String {
-        return if (content != null)
-            String.format("Wrapper[%s]", content)
-        else
-            "Wrapper.empty"
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        if (other !is Wrapper<*>) {
-            return false
-        }
-
-        return content == other.content
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hashCode(content)
-    }
+ */
+data class Wrapper<out T : Any>(val content: T? = null) {
 
     companion object {
         private val EMPTY = Wrapper<Any>()
