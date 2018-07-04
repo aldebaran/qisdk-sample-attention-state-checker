@@ -74,14 +74,19 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
     }
 
     private fun displayStartButton() {
-        setStartButtonVisibility(View.VISIBLE)
+        runOnUiThread {
+            startButton.apply {
+                visibility = View.VISIBLE
+            }
+        }
     }
 
     private fun hideStartButton() {
-        setStartButtonVisibility(View.INVISIBLE)
-    }
-
-    private fun setStartButtonVisibility(visibility: Int) {
-        runOnUiThread { startButton.visibility = visibility }
+        runOnUiThread {
+            startButton.apply {
+                isChecked = false
+                visibility = View.INVISIBLE
+            }
+        }
     }
 }

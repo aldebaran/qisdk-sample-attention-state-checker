@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".introduction.IntroductionActivity">
 
-    <Button
+    <RadioButton
+        style="@style/RadioButton"
         android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
