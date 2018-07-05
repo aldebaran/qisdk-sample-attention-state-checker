@@ -41,6 +41,8 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
             }
         }
 
+        closeButton.setOnClickListener { finishAffinity() }
+
         QiSDK.register(this, this)
     }
 
