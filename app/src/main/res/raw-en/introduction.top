@@ -4,4 +4,4 @@ concept: (start) ["Let's start" "Let's play"]
 
 proposal: %first I will show you my ability to follow your eyes and your sight. ^enableThenGoto(second)
 proposal: %second We can do a little game together. Tell me "Let's start" to start the game.
-    u1: (~start) Got it!
+    u1: (~start) %start Got it!

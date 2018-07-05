@@ -5,10 +5,7 @@ import android.view.View
 import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
-import com.aldebaran.qi.sdk.`object`.conversation.AutonomousReactionImportance
-import com.aldebaran.qi.sdk.`object`.conversation.AutonomousReactionValidity
-import com.aldebaran.qi.sdk.`object`.conversation.Chat
-import com.aldebaran.qi.sdk.`object`.conversation.QiChatbot
+import com.aldebaran.qi.sdk.`object`.conversation.*
 import com.aldebaran.qi.sdk.builder.ChatBuilder
 import com.aldebaran.qi.sdk.builder.QiChatbotBuilder
 import com.aldebaran.qi.sdk.builder.TopicBuilder
@@ -20,10 +17,17 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     private var chat: Chat? = null
     private var qiChatbot: QiChatbot? = null
+    private var startBookmark: Bookmark? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_introduction)
+
+        startButton.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                goToBookmark(startBookmark)
+            }
+        }
 
         QiSDK.register(this, this)
     }
@@ -43,15 +47,18 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
                         .withResource(R.raw.introduction)
                         .build()
 
-        val firstBookmark = topic.bookmarks["first"]
+        val bookmarks = topic.bookmarks
+        val firstBookmark = bookmarks[FIRST_BOOKMARK]
+        startBookmark = bookmarks[START_BOOKMARK]
 
         qiChatbot = QiChatbotBuilder.with(qiContext)
                             .withTopic(topic)
                             .build()
 
         qiChatbot?.addOnBookmarkReachedListener {
-            if (it.name == "second") {
-                displayStartButton()
+            when (it.name) {
+                SECOND_BOOKMARK -> displayStartButton()
+                START_BOOKMARK -> checkStartButton()
             }
         }
 
@@ -59,7 +66,7 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
                     .withChatbot(qiChatbot)
                     .build()
 
-        chat?.addOnStartedListener { qiChatbot?.goToBookmark(firstBookmark, AutonomousReactionImportance.HIGH, AutonomousReactionValidity.IMMEDIATE) }
+        chat?.addOnStartedListener { goToBookmark(firstBookmark) }
 
         chat?.async()?.run()
     }
@@ -88,5 +95,23 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
                 visibility = View.INVISIBLE
             }
         }
+    }
+
+    private fun checkStartButton() {
+        runOnUiThread {
+            startButton.apply {
+                isChecked = true
+            }
+        }
+    }
+
+    private fun goToBookmark(bookmark: Bookmark?) {
+        qiChatbot?.async()?.goToBookmark(bookmark, AutonomousReactionImportance.HIGH, AutonomousReactionValidity.IMMEDIATE)
+    }
+
+    private companion object {
+        const val FIRST_BOOKMARK = "first"
+        const val SECOND_BOOKMARK = "second"
+        const val START_BOOKMARK = "start"
     }
 }
