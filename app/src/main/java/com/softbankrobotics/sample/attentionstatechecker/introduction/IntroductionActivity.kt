@@ -1,5 +1,6 @@
 package com.softbankrobotics.sample.attentionstatechecker.introduction
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.aldebaran.qi.sdk.QiContext
@@ -11,6 +12,7 @@ import com.aldebaran.qi.sdk.builder.QiChatbotBuilder
 import com.aldebaran.qi.sdk.builder.TopicBuilder
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
 import com.softbankrobotics.sample.attentionstatechecker.R
+import com.softbankrobotics.sample.attentionstatechecker.game.GameActivity
 import io.reactivex.Single
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -77,6 +79,8 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
             }
         }
 
+        qiChatbot?.addOnEndedListener { goToGame() }
+
         chat = ChatBuilder.with(qiContext)
                     .withChatbot(qiChatbot)
                     .build()
@@ -90,6 +94,7 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
         stopTimer()
 
         qiChatbot?.removeAllOnBookmarkReachedListeners()
+        qiChatbot?.removeAllOnEndedListeners()
         chat?.removeAllOnStartedListeners()
     }
 
@@ -138,6 +143,13 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
 
     private fun stopTimer() {
         timerDisposable?.takeUnless { it.isDisposed }?.dispose()
+    }
+
+    private fun goToGame() {
+        runOnUiThread {
+            val intent = Intent(this, GameActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private companion object {
