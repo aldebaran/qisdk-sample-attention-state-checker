@@ -93,8 +93,13 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
                 say(text).andThenConsume { gameMachine.postEvent(GameEvent.InstructionsFinished) }
             }
             is GameState.NotMatching -> {
-                val (expectedDirection, lookDirection) = gameState
-                val text = "Oh, I saw you looked $lookDirection, look $expectedDirection"
+                val (expectedDirection, lookDirection, consecutiveErrors) = gameState
+                val text = if (consecutiveErrors < 3) {
+                    "Oh, I saw you looked $lookDirection, look $expectedDirection"
+                } else {
+                    "Oh, I saw you looked $lookDirection. Little tips: move your eyes, not your head. Look $expectedDirection"
+                }
+
                 say(text).andThenConsume { gameMachine.postEvent(GameEvent.NotMatchingFinished) }
             }
             is GameState.Matching -> {

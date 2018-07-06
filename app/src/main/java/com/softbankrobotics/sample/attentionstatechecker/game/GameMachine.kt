@@ -20,6 +20,8 @@ internal class GameMachine {
 
     private val subject = BehaviorSubject.createDefault<GameState>(GameState.Idle)
 
+    private var consecutiveErrors = 0
+
     fun gameState(): Observable<GameState> = subject
 
     fun postEvent(gameEvent: GameEvent) {
@@ -40,7 +42,8 @@ internal class GameMachine {
                 subject.onNext(GameState.Matching(currentState.expectedDirection))
             }
             is GameEvent.NotMatch -> if (currentState is GameState.Playing) {
-                subject.onNext(GameState.NotMatching(currentState.expectedDirection, gameEvent.lookDirection))
+                consecutiveErrors++
+                subject.onNext(GameState.NotMatching(currentState.expectedDirection, gameEvent.lookDirection, consecutiveErrors))
             }
             is GameEvent.MatchingFinished -> if (currentState is GameState.Matching) {
                 publishNextInstruction()
@@ -56,6 +59,7 @@ internal class GameMachine {
 
     private fun publishNextInstruction() {
         if (directions.isNotEmpty()) {
+            consecutiveErrors = 0
             subject.onNext(GameState.Instructions(directions.poll()))
         } else {
             subject.onNext(GameState.Win)

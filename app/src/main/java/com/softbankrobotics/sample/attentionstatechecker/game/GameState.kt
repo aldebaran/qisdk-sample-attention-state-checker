@@ -15,7 +15,7 @@ internal sealed class GameState {
     object Briefing : GameState()
     data class Instructions(val expectedDirection: Direction) : GameState()
     data class Playing(val expectedDirection: Direction) : GameState()
-    data class NotMatching(val expectedDirection: Direction, val lookDirection: Direction) : GameState()
+    data class NotMatching(val expectedDirection: Direction, val lookDirection: Direction, val consecutiveErrors: Int) : GameState()
     data class Matching(val matchingDirection: Direction) : GameState()
     object Win : GameState()
     object End : GameState()
