@@ -5,12 +5,14 @@
 
 package com.softbankrobotics.sample.attentionstatechecker.game
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
 import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayStrategy
 import com.softbankrobotics.sample.attentionstatechecker.R
+import com.softbankrobotics.sample.attentionstatechecker.introduction.IntroductionActivity
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
@@ -88,6 +90,16 @@ class GameActivity : RobotActivity() {
                 showExpectedDirection(gameState.matchingDirection)
                 showLookDirection(gameState.matchingDirection)
                 showHuman()
+            }
+            is GameState.Win -> {
+                hideExpectedDirection()
+                hideLookDirection()
+                hideHuman()
+            }
+            is GameState.End -> {
+                val intent = Intent(this, IntroductionActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+                startActivity(intent)
             }
         }
     }

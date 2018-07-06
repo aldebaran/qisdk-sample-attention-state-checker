@@ -15,9 +15,8 @@ import java.util.*
  */
 internal class GameMachine {
 
-    private val random = Random()
-    private val directions = Arrays.asList(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT)
-    private val directionsSize = directions.size
+    private val directions: Queue<Direction> =
+            LinkedList(listOf(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT).shuffled())
 
     private val subject = BehaviorSubject.createDefault<GameState>(GameState.Idle)
 
@@ -32,7 +31,7 @@ internal class GameMachine {
             }
             is GameEvent.FocusLost -> subject.onNext(GameState.Idle)
             is GameEvent.BriefingFinished -> if (currentState === GameState.Briefing) {
-                subject.onNext(GameState.Instructions(computeRandomDirection()))
+                publishNextInstruction()
             }
             is GameEvent.InstructionsFinished -> if (currentState is GameState.Instructions) {
                 subject.onNext(GameState.Playing(currentState.expectedDirection))
@@ -44,13 +43,22 @@ internal class GameMachine {
                 subject.onNext(GameState.NotMatching(currentState.expectedDirection, gameEvent.lookDirection))
             }
             is GameEvent.MatchingFinished -> if (currentState is GameState.Matching) {
-                subject.onNext(GameState.Instructions(computeRandomDirection()))
+                publishNextInstruction()
             }
             is GameEvent.NotMatchingFinished -> if (currentState is GameState.NotMatching) {
                 subject.onNext(GameState.Playing(currentState.expectedDirection))
             }
+            is GameEvent.WinFinished -> if (currentState === GameState.Win) {
+                subject.onNext(GameState.End)
+            }
         }
     }
 
-    private fun computeRandomDirection() = directions[random.nextInt(directionsSize)]
+    private fun publishNextInstruction() {
+        if (directions.isNotEmpty()) {
+            subject.onNext(GameState.Instructions(directions.poll()))
+        } else {
+            subject.onNext(GameState.Win)
+        }
+    }
 }

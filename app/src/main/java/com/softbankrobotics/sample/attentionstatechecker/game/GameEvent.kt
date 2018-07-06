@@ -19,4 +19,5 @@ internal sealed class GameEvent {
     class NotMatch(val lookDirection: Direction) : GameEvent()
     object MatchingFinished : GameEvent()
     object NotMatchingFinished : GameEvent()
+    object WinFinished : GameEvent()
 }
