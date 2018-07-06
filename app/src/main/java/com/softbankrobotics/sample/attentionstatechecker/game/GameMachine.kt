@@ -28,10 +28,10 @@ internal class GameMachine {
 
         when (gameEvent) {
             is GameEvent.FocusGained -> if (currentState === GameState.Idle) {
-                subject.onNext(GameState.Intro)
+                subject.onNext(GameState.Briefing)
             }
             is GameEvent.FocusLost -> subject.onNext(GameState.Idle)
-            is GameEvent.IntroFinished -> if (currentState === GameState.Intro) {
+            is GameEvent.BriefingFinished -> if (currentState === GameState.Briefing) {
                 subject.onNext(GameState.Instructions(computeRandomDirection()))
             }
             is GameEvent.InstructionsFinished -> if (currentState is GameState.Instructions) {

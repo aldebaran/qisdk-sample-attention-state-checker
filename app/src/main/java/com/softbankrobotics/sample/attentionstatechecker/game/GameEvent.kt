@@ -13,7 +13,7 @@ import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
 internal sealed class GameEvent {
     object FocusGained : GameEvent()
     object FocusLost : GameEvent()
-    object IntroFinished : GameEvent()
+    object BriefingFinished : GameEvent()
     object InstructionsFinished : GameEvent()
     object Match : GameEvent()
     class NotMatch(val lookDirection: Direction) : GameEvent()

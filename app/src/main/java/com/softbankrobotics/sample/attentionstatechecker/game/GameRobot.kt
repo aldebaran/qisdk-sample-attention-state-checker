@@ -85,8 +85,8 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
         }
 
         when (gameState) {
-            is GameState.Intro -> {
-                say("Follow my instructions by looking where I tell you to").andThenConsume { gameMachine.postEvent(GameEvent.IntroFinished) }
+            is GameState.Briefing -> {
+                say("I will give you some directions, and you will have to move your eyes toward them. Let's do this 4 times!").andThenConsume { gameMachine.postEvent(GameEvent.BriefingFinished) }
             }
             is GameState.Instructions -> {
                 val text = "Look ${gameState.expectedDirection}"

@@ -12,7 +12,7 @@ import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
  */
 internal sealed class GameState {
     object Idle : GameState()
-    object Intro : GameState()
+    object Briefing : GameState()
     data class Instructions(val expectedDirection: Direction) : GameState()
     data class Playing(val expectedDirection: Direction) : GameState()
     data class NotMatching(val expectedDirection: Direction, val lookDirection: Direction) : GameState()

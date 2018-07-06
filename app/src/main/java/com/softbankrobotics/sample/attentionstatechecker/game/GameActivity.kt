@@ -64,7 +64,7 @@ class GameActivity : RobotActivity() {
 
     private fun handleGameState(gameState: GameState) {
         when (gameState) {
-            is GameState.Idle, is GameState.Intro -> {
+            is GameState.Idle, is GameState.Briefing -> {
                 hideExpectedDirection()
                 hideLookDirection()
                 hideHuman()
