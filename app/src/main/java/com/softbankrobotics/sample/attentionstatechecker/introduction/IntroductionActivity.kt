@@ -30,6 +30,7 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
     private var timerDisposable: Disposable? = null
     private val shouldRepeatWithTimer = AtomicBoolean(true)
 
+    private var startAtHome = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,6 +55,11 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
     override fun onDestroy() {
         QiSDK.unregister(this, this)
         super.onDestroy()
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        startAtHome = intent?.extras?.getBoolean("startAtHome") ?: false
     }
 
     override fun onRobotFocusGained(qiContext: QiContext?) {
@@ -87,7 +93,13 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
                     .withChatbot(qiChatbot)
                     .build()
 
-        chat?.addOnStartedListener { goToBookmark(firstBookmark) }
+        chat?.addOnStartedListener {
+            if (startAtHome) {
+                goToBookmark(secondBookmark)
+            } else {
+                goToBookmark(firstBookmark)
+            }
+        }
 
         chat?.async()?.run()
     }

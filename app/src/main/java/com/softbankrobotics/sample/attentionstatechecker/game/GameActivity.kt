@@ -64,6 +64,10 @@ class GameActivity : RobotActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        goToHome()
+    }
+
     private fun handleGameState(gameState: GameState) {
         when (gameState) {
             is GameState.Idle, is GameState.Briefing -> {
@@ -97,9 +101,7 @@ class GameActivity : RobotActivity() {
                 hideHuman()
             }
             is GameState.End -> {
-                val intent = Intent(this, IntroductionActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
-                startActivity(intent)
+                goToHome()
             }
         }
     }
@@ -130,6 +132,13 @@ class GameActivity : RobotActivity() {
 
     private fun showHuman() {
         humanImageView.visibility = View.VISIBLE
+    }
+
+    private fun goToHome() {
+        val intent = Intent(this, IntroductionActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        intent.putExtra("startAtHome", true)
+        startActivity(intent)
     }
 
     private fun hideSystemUI() {
