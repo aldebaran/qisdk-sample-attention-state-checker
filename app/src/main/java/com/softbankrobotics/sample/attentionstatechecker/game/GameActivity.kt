@@ -36,6 +36,8 @@ class GameActivity : RobotActivity() {
         setSpeechBarDisplayStrategy(SpeechBarDisplayStrategy.OVERLAY)
         setContentView(R.layout.activity_game)
 
+        closeButton.setOnClickListener { finishAffinity() }
+
         QiSDK.register(this, gameRobot)
     }
 
