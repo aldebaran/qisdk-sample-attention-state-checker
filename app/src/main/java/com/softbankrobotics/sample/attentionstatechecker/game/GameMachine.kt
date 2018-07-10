@@ -17,10 +17,12 @@ internal class GameMachine {
 
     private val directions: Queue<Direction> =
             LinkedList(listOf(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT).shuffled())
+    private val totalDirections = directions.size
 
     private val subject = BehaviorSubject.createDefault<GameState>(GameState.Idle)
 
     private var consecutiveErrors = 0
+    private var matchedDirections = 0
 
     fun gameState(): Observable<GameState> = subject
 
@@ -33,29 +35,31 @@ internal class GameMachine {
             }
             is GameEvent.FocusLost -> subject.onNext(GameState.Idle)
             is GameEvent.BriefingFinished -> if (currentState === GameState.Briefing) {
+                matchedDirections = 0
                 publishNextInstruction()
             }
             is GameEvent.InstructionsFinished -> if (currentState is GameState.Instructions) {
-                subject.onNext(GameState.Playing(currentState.expectedDirection))
+                subject.onNext(GameState.Playing(currentState.expectedDirection, matchedDirections, totalDirections))
             }
             is GameEvent.Match -> if (currentState is GameState.Playing) {
-                subject.onNext(GameState.Matching(currentState.expectedDirection))
+                matchedDirections++
+                subject.onNext(GameState.Matching(currentState.expectedDirection, matchedDirections, totalDirections))
             }
             is GameEvent.NotMatch -> if (currentState is GameState.Playing) {
                 consecutiveErrors++
-                subject.onNext(GameState.NotMatching(currentState.expectedDirection, gameEvent.lookDirection, consecutiveErrors))
+                subject.onNext(GameState.NotMatching(currentState.expectedDirection, gameEvent.lookDirection, consecutiveErrors, matchedDirections, totalDirections))
             }
             is GameEvent.MatchingFinished -> if (currentState is GameState.Matching) {
                 publishNextInstruction()
             }
             is GameEvent.NotMatchingFinished -> if (currentState is GameState.NotMatching) {
-                subject.onNext(GameState.Playing(currentState.expectedDirection))
+                subject.onNext(GameState.Playing(currentState.expectedDirection, matchedDirections, totalDirections))
             }
             is GameEvent.WinFinished -> if (currentState === GameState.Win) {
                 subject.onNext(GameState.End)
             }
-            is GameEvent.Stop -> subject.onNext(GameState.Stopping)
-            is GameEvent.Stopped -> if (currentState === GameState.Stopping) {
+            is GameEvent.Stop -> subject.onNext(GameState.Stopping(matchedDirections, totalDirections))
+            is GameEvent.Stopped -> if (currentState is GameState.Stopping) {
                 subject.onNext(GameState.End)
             }
         }
@@ -64,7 +68,7 @@ internal class GameMachine {
     private fun publishNextInstruction() {
         if (directions.isNotEmpty()) {
             consecutiveErrors = 0
-            subject.onNext(GameState.Instructions(directions.poll()))
+            subject.onNext(GameState.Instructions(directions.poll(), matchedDirections, totalDirections))
         } else {
             subject.onNext(GameState.Win)
         }

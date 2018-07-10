@@ -82,31 +82,41 @@ class GameActivity : RobotActivity() {
         when (gameState) {
             is GameState.Idle,
             is GameState.Briefing,
-            is GameState.Win,
-            is GameState.Stopping -> {
+            is GameState.Win -> {
                 hideExpectedDirection()
                 hideLookDirection()
                 hideHuman()
+                hideProgress()
             }
             is GameState.Instructions -> {
                 showExpectedDirection(gameState.expectedDirection)
                 hideLookDirection()
                 hideHuman()
+                showProgress(gameState.matched, gameState.total)
             }
             is GameState.Playing -> {
                 showExpectedDirection(gameState.expectedDirection)
                 showWaitingForLookDirection()
                 showHuman()
+                showProgress(gameState.matched, gameState.total)
             }
             is GameState.NotMatching -> {
                 showExpectedDirection(gameState.expectedDirection)
                 showLookDirection(gameState.lookDirection)
                 showHuman()
+                showProgress(gameState.matched, gameState.total)
             }
             is GameState.Matching -> {
                 showExpectedDirection(gameState.matchingDirection)
                 showLookDirection(gameState.matchingDirection)
                 showHuman()
+                showProgress(gameState.matched, gameState.total)
+            }
+            is GameState.Stopping -> {
+                hideExpectedDirection()
+                hideLookDirection()
+                hideHuman()
+                showProgress(gameState.matched, gameState.total)
             }
             is GameState.End -> {
                 goToHome()
@@ -140,6 +150,17 @@ class GameActivity : RobotActivity() {
 
     private fun showHuman() {
         humanImageView.visibility = View.VISIBLE
+    }
+
+    private fun hideProgress() {
+        progressTextView.visibility = View.INVISIBLE
+    }
+
+    private fun showProgress(matched: Int, total: Int) {
+        progressTextView.apply {
+            visibility = View.VISIBLE
+            text = getString(R.string.progress, matched, total)
+        }
     }
 
     private fun goToHome() {
