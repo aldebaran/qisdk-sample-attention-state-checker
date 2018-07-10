@@ -12,45 +12,27 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:textSize="72sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/lookDirectionTextView"
+        android:fontFamily="@font/open_sans_bold"
+        android:textSize="32sp"
+        app:layout_constraintBaseline_toBaselineOf="@+id/stopButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         tools:text="LOOK UP" />
-
-    <TextView
-        android:id="@+id/lookDirectionTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:textSize="72sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/guideline"
-        app:layout_constraintTop_toBottomOf="@+id/expectedDirectionTextView"
-        tools:text="DOWN_RIGHT" />
 
     <ImageView
         android:id="@+id/humanImageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/lookDirectionTextView"
-        app:layout_constraintEnd_toStartOf="@+id/guideline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="40dp"
+        android:layout_marginTop="58dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toTopOf="@+id/expectedDirectionTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/lookDirectionTextView"
-        app:srcCompat="@drawable/ic_img_icon_humanmen" />
-
-    <android.support.constraint.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintGuide_percent="0.45" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/ic_user_face" />
 
     <ImageView
         android:id="@+id/closeButton"
@@ -75,8 +57,8 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <RadioButton
-        style="@style/RadioButton"
         android:id="@+id/stopButton"
+        style="@style/RadioButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"

@@ -14,6 +14,7 @@ import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayS
 import com.softbankrobotics.sample.attentionstatechecker.R
 import com.softbankrobotics.sample.attentionstatechecker.introduction.IntroductionActivity
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
+import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -84,38 +85,26 @@ class GameActivity : RobotActivity() {
             is GameState.Briefing,
             is GameState.Win -> {
                 hideExpectedDirection()
-                hideLookDirection()
-                hideHuman()
                 hideProgress()
             }
             is GameState.Instructions -> {
                 showExpectedDirection(gameState.expectedDirection)
-                hideLookDirection()
-                hideHuman()
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.Playing -> {
                 showExpectedDirection(gameState.expectedDirection)
-                showWaitingForLookDirection()
-                showHuman()
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.NotMatching -> {
                 showExpectedDirection(gameState.expectedDirection)
-                showLookDirection(gameState.lookDirection)
-                showHuman()
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.Matching -> {
                 showExpectedDirection(gameState.matchingDirection)
-                showLookDirection(gameState.matchingDirection)
-                showHuman()
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.Stopping -> {
                 hideExpectedDirection()
-                hideLookDirection()
-                hideHuman()
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.End -> {
@@ -126,31 +115,23 @@ class GameActivity : RobotActivity() {
 
     private fun hideExpectedDirection() {
         expectedDirectionTextView.text = ""
+        humanImageView.visibility = View.INVISIBLE
     }
 
     private fun showExpectedDirection(direction: Direction) {
         expectedDirectionTextView.text = getString(R.string.look_instruction, direction.toString())
-    }
-
-    private fun hideLookDirection() {
-        lookDirectionTextView.text = ""
-    }
-
-    private fun showLookDirection(direction: Direction) {
-        lookDirectionTextView.text = direction.toString()
-    }
-
-    private fun showWaitingForLookDirection() {
-        lookDirectionTextView.text = getString(R.string.question_mark)
-    }
-
-    private fun hideHuman() {
-        humanImageView.visibility = View.INVISIBLE
-    }
-
-    private fun showHuman() {
         humanImageView.visibility = View.VISIBLE
+        humanImageView.setImageResource(humanImageFromDirection(direction))
     }
+
+    private fun humanImageFromDirection(direction: Direction) =
+        when (direction) {
+            UP -> R.drawable.ic_user_face_up
+            DOWN -> R.drawable.ic_user_face_down
+            LEFT -> R.drawable.ic_user_face_left
+            RIGHT -> R.drawable.ic_user_face_right
+            else -> throw IllegalStateException("Unknown direction $direction")
+        }
 
     private fun hideProgress() {
         progressTextView.visibility = View.INVISIBLE
