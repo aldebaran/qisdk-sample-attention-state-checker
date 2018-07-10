@@ -10,7 +10,6 @@
         android:id="@+id/closeButton"
         android:layout_width="73dp"
         android:layout_height="60dp"
-        android:background="@drawable/navigation_background_selector"
         android:scaleType="center"
         android:src="@drawable/ic_baseline_close"
         android:tint="@color/navigation_tint_selector"
