@@ -84,27 +84,33 @@ class GameActivity : RobotActivity() {
             is GameState.Idle,
             is GameState.Briefing,
             is GameState.Stopping -> {
+                showStop()
                 hideExpectedDirection()
                 hideProgress()
                 showNeutralHuman()
             }
             is GameState.Instructions -> {
+                showStop()
                 showExpectedDirection(gameState.expectedDirection)
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.Playing -> {
+                showStop()
                 showExpectedDirection(gameState.expectedDirection)
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.NotMatching -> {
+                showStop()
                 showExpectedDirection(gameState.expectedDirection)
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.Matching -> {
+                showStop()
                 showExpectedDirection(gameState.matchingDirection)
                 showProgress(gameState.matched, gameState.total)
             }
             is GameState.Win -> {
+                hideStop()
                 hideExpectedDirection()
                 hideProgress()
             }
@@ -148,6 +154,14 @@ class GameActivity : RobotActivity() {
             visibility = View.VISIBLE
             text = getString(R.string.progress, matched, total)
         }
+    }
+
+    private fun hideStop() {
+        stopButton.visibility = View.INVISIBLE
+    }
+
+    private fun showStop() {
+        stopButton.visibility = View.VISIBLE
     }
 
     private fun goToHome() {
