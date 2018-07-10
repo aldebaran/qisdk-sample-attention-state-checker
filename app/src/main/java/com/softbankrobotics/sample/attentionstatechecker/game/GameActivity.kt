@@ -83,9 +83,10 @@ class GameActivity : RobotActivity() {
         when (gameState) {
             is GameState.Idle,
             is GameState.Briefing,
-            is GameState.Win -> {
+            is GameState.Stopping -> {
                 hideExpectedDirection()
                 hideProgress()
+                showNeutralHuman()
             }
             is GameState.Instructions -> {
                 showExpectedDirection(gameState.expectedDirection)
@@ -103,9 +104,9 @@ class GameActivity : RobotActivity() {
                 showExpectedDirection(gameState.matchingDirection)
                 showProgress(gameState.matched, gameState.total)
             }
-            is GameState.Stopping -> {
+            is GameState.Win -> {
                 hideExpectedDirection()
-                showProgress(gameState.matched, gameState.total)
+                hideProgress()
             }
             is GameState.End -> {
                 goToHome()
@@ -122,6 +123,11 @@ class GameActivity : RobotActivity() {
         expectedDirectionTextView.text = getString(R.string.look_instruction, direction.toString())
         humanImageView.visibility = View.VISIBLE
         humanImageView.setImageResource(humanImageFromDirection(direction))
+    }
+
+    private fun showNeutralHuman() {
+        humanImageView.visibility = View.VISIBLE
+        humanImageView.setImageResource(R.drawable.ic_user_face)
     }
 
     private fun humanImageFromDirection(direction: Direction) =
