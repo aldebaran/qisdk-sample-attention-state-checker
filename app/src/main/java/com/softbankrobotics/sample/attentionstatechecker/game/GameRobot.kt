@@ -10,6 +10,7 @@ import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
 import com.aldebaran.qi.sdk.builder.SayBuilder
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
+import com.softbankrobotics.sample.attentionstatechecker.utils.cancellation
 import com.softbankrobotics.sample.attentionstatechecker.utils.directionObservable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -26,6 +27,8 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
     private var gameStateDisposable: Disposable? = null
     private var directionDisposable: Disposable? = null
     private var expectedDirection: Direction? = null
+
+    private var speech: Future<Void>? = null
 
     override fun onRobotFocusGained(qiContext: QiContext) {
         this.qiContext = qiContext
@@ -125,10 +128,15 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
     }
 
     private fun say(text: String): Future<Void> {
-        return SayBuilder.with(qiContext)
-                .withText(text)
-                .build()
-                .async()
-                .run()
+        return speech.cancellation()
+                .andThenCompose {
+                    val newSpeech = SayBuilder.with(qiContext)
+                            .withText(text)
+                            .buildAsync()
+                            .andThenCompose { it.async().run() }
+
+                    speech = newSpeech
+                    newSpeech
+                }
     }
 }
