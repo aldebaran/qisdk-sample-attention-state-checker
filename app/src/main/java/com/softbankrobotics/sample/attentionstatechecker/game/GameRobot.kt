@@ -108,6 +108,9 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
             is GameState.Win -> {
                 say("Impressive! We’ve done it! If you want, we can start again.").andThenConsume { gameMachine.postEvent(GameEvent.WinFinished) }
             }
+            is GameState.Stopping -> {
+                say("Ok, let's have a break.").andThenConsume { gameMachine.postEvent(GameEvent.Stopped) }
+            }
         }
     }
 

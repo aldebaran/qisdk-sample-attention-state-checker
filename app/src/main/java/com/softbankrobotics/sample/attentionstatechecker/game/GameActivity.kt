@@ -38,12 +38,19 @@ class GameActivity : RobotActivity() {
 
         homeButton.setOnClickListener { goToHome() }
         closeButton.setOnClickListener { finishAffinity() }
+        stopButton.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                gameMachine.postEvent(GameEvent.Stop)
+            }
+        }
 
         QiSDK.register(this, gameRobot)
     }
 
     override fun onResume() {
         super.onResume()
+        stopButton.isChecked = false
+
         disposables.add(gameMachine.gameState()
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -73,7 +80,10 @@ class GameActivity : RobotActivity() {
 
     private fun handleGameState(gameState: GameState) {
         when (gameState) {
-            is GameState.Idle, is GameState.Briefing -> {
+            is GameState.Idle,
+            is GameState.Briefing,
+            is GameState.Win,
+            is GameState.Stopping -> {
                 hideExpectedDirection()
                 hideLookDirection()
                 hideHuman()
@@ -97,11 +107,6 @@ class GameActivity : RobotActivity() {
                 showExpectedDirection(gameState.matchingDirection)
                 showLookDirection(gameState.matchingDirection)
                 showHuman()
-            }
-            is GameState.Win -> {
-                hideExpectedDirection()
-                hideLookDirection()
-                hideHuman()
             }
             is GameState.End -> {
                 goToHome()

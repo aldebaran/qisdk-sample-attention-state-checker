@@ -20,4 +20,6 @@ internal sealed class GameEvent {
     object MatchingFinished : GameEvent()
     object NotMatchingFinished : GameEvent()
     object WinFinished : GameEvent()
+    object Stop : GameEvent()
+    object Stopped : GameEvent()
 }

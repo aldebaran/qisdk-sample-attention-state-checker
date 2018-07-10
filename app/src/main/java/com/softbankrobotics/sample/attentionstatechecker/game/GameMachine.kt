@@ -54,6 +54,10 @@ internal class GameMachine {
             is GameEvent.WinFinished -> if (currentState === GameState.Win) {
                 subject.onNext(GameState.End)
             }
+            is GameEvent.Stop -> subject.onNext(GameState.Stopping)
+            is GameEvent.Stopped -> if (currentState === GameState.Stopping) {
+                subject.onNext(GameState.End)
+            }
         }
     }
 
