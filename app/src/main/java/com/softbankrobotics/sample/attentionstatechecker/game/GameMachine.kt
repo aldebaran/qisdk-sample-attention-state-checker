@@ -15,9 +15,8 @@ import java.util.*
  */
 internal class GameMachine {
 
-    private val directions: Queue<Direction> =
-            LinkedList(listOf(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT).shuffled())
-    private val totalDirections = directions.size
+    private var directions: Queue<Direction> = LinkedList()
+    private var totalDirections = directions.size
 
     private val subject = BehaviorSubject.createDefault<GameState>(GameState.Idle)
 
@@ -36,6 +35,7 @@ internal class GameMachine {
             is GameEvent.FocusLost -> subject.onNext(GameState.Idle)
             is GameEvent.BriefingFinished -> if (currentState === GameState.Briefing) {
                 matchedDirections = 0
+                computeDirections()
                 publishNextInstruction()
             }
             is GameEvent.InstructionsFinished -> if (currentState is GameState.Instructions) {
@@ -72,5 +72,10 @@ internal class GameMachine {
         } else {
             subject.onNext(GameState.Win)
         }
+    }
+
+    private fun computeDirections() {
+        directions = LinkedList(listOf(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT).shuffled())
+        totalDirections = directions.size
     }
 }
