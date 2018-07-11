@@ -6,7 +6,9 @@
 package com.softbankrobotics.sample.attentionstatechecker.game
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
+import android.support.annotation.RawRes
 import android.view.View
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
@@ -30,6 +32,8 @@ class GameActivity : RobotActivity() {
     private val gameRobot = GameRobot(gameMachine)
 
     private val disposables = CompositeDisposable()
+
+    private var mediaPlayer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +64,8 @@ class GameActivity : RobotActivity() {
 
     override fun onPause() {
         disposables.clear()
+        mediaPlayer?.release()
+        mediaPlayer = null
         super.onPause()
     }
 
@@ -103,17 +109,20 @@ class GameActivity : RobotActivity() {
                 showStop()
                 showExpectedDirection(gameState.expectedDirection)
                 showProgress(gameState.matched, gameState.total)
+                playSound(R.raw.error)
             }
             is GameState.Matching -> {
                 showStop()
                 showExpectedDirection(gameState.matchingDirection)
                 showProgress(gameState.matched, gameState.total)
+                playSound(R.raw.success)
             }
             is GameState.Win -> {
                 hideStop()
                 hideExpectedDirection()
                 hideProgress()
                 showTrophy()
+                playSound(R.raw.big_success)
             }
             is GameState.End -> {
                 goToHome()
@@ -175,6 +184,10 @@ class GameActivity : RobotActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
         intent.putExtra("startAtHome", true)
         startActivity(intent)
+    }
+
+    private fun playSound(@RawRes resource: Int) {
+        mediaPlayer = MediaPlayer.create(this, resource).apply { start() }
     }
 
     private fun hideSystemUI() {
