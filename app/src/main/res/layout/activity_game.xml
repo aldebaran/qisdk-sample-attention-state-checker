@@ -13,7 +13,6 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:fontFamily="@font/open_sans_bold"
-        android:textSize="32sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/stopButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,6 +61,7 @@
         android:layout_marginBottom="32dp"
         android:layout_marginStart="32dp"
         android:text="@string/stop"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -71,7 +71,6 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/open_sans_semibold"
-        android:textSize="32sp"
         app:layout_constraintBaseline_toBaselineOf="@+id/stopButton"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="1/4" />
