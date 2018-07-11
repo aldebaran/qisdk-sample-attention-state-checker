@@ -113,6 +113,7 @@ class GameActivity : RobotActivity() {
                 hideStop()
                 hideExpectedDirection()
                 hideProgress()
+                showTrophy()
             }
             is GameState.End -> {
                 goToHome()
@@ -122,18 +123,23 @@ class GameActivity : RobotActivity() {
 
     private fun hideExpectedDirection() {
         expectedDirectionTextView.text = ""
-        humanImageView.visibility = View.INVISIBLE
+        imageView.visibility = View.INVISIBLE
     }
 
     private fun showExpectedDirection(direction: Direction) {
         expectedDirectionTextView.text = getString(R.string.look_instruction, direction.toString())
-        humanImageView.visibility = View.VISIBLE
-        humanImageView.setImageResource(humanImageFromDirection(direction))
+        imageView.visibility = View.VISIBLE
+        imageView.setImageResource(humanImageFromDirection(direction))
     }
 
     private fun showNeutralHuman() {
-        humanImageView.visibility = View.VISIBLE
-        humanImageView.setImageResource(R.drawable.ic_user_face)
+        imageView.visibility = View.VISIBLE
+        imageView.setImageResource(R.drawable.ic_user_face)
+    }
+
+    private fun showTrophy() {
+        imageView.visibility = View.VISIBLE
+        imageView.setImageResource(R.drawable.trophy)
     }
 
     private fun humanImageFromDirection(direction: Direction) =
