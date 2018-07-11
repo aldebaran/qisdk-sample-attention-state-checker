@@ -53,7 +53,7 @@ internal class GameMachine {
                 publishNextInstruction()
             }
             is GameEvent.NotMatchingFinished -> if (currentState is GameState.NotMatching) {
-                subject.onNext(GameState.Playing(currentState.expectedDirection, matchedDirections, totalDirections))
+                subject.onNext(GameState.Instructions(currentState.expectedDirection, matchedDirections, totalDirections))
             }
             is GameEvent.WinFinished -> if (currentState === GameState.Win) {
                 subject.onNext(GameState.End)
