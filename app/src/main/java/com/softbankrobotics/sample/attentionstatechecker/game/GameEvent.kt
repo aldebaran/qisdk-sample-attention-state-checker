@@ -16,7 +16,7 @@ internal sealed class GameEvent {
     object BriefingFinished : GameEvent()
     object InstructionsFinished : GameEvent()
     object Match : GameEvent()
-    class NotMatch(val lookDirection: Direction) : GameEvent()
+    data class NotMatch(val lookDirection: Direction) : GameEvent()
     object MatchingFinished : GameEvent()
     object NotMatchingFinished : GameEvent()
     object WinFinished : GameEvent()
