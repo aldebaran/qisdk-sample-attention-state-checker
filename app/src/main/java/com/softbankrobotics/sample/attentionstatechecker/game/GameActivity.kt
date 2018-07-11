@@ -94,27 +94,32 @@ class GameActivity : RobotActivity() {
                 hideExpectedDirection()
                 hideProgress()
                 showNeutralHuman()
+                hideTrophy()
             }
             is GameState.Instructions -> {
                 showStop()
                 showExpectedDirection(gameState.expectedDirection)
                 showProgress(gameState.matched, gameState.total)
+                hideTrophy()
             }
             is GameState.Playing -> {
                 showStop()
                 showExpectedDirection(gameState.expectedDirection)
                 showProgress(gameState.matched, gameState.total)
+                hideTrophy()
             }
             is GameState.NotMatching -> {
                 showStop()
                 showExpectedDirection(gameState.expectedDirection)
                 showProgress(gameState.matched, gameState.total)
+                hideTrophy()
                 playSound(R.raw.error)
             }
             is GameState.Matching -> {
                 showStop()
                 showExpectedDirection(gameState.matchingDirection)
                 showProgress(gameState.matched, gameState.total)
+                hideTrophy()
                 playSound(R.raw.success)
             }
             is GameState.Win -> {
@@ -132,23 +137,26 @@ class GameActivity : RobotActivity() {
 
     private fun hideExpectedDirection() {
         expectedDirectionTextView.text = ""
-        imageView.visibility = View.INVISIBLE
+        humanImageView.visibility = View.INVISIBLE
     }
 
     private fun showExpectedDirection(direction: Direction) {
         expectedDirectionTextView.text = getString(R.string.look_instruction, direction.toString())
-        imageView.visibility = View.VISIBLE
-        imageView.setImageResource(humanImageFromDirection(direction))
+        humanImageView.visibility = View.VISIBLE
+        humanImageView.setImageResource(humanImageFromDirection(direction))
     }
 
     private fun showNeutralHuman() {
-        imageView.visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.ic_user_face)
+        humanImageView.visibility = View.VISIBLE
+        humanImageView.setImageResource(R.drawable.ic_user_face)
+    }
+
+    private fun hideTrophy() {
+        trophyImageView.visibility = View.INVISIBLE
     }
 
     private fun showTrophy() {
-        imageView.visibility = View.VISIBLE
-        imageView.setImageResource(R.drawable.trophy)
+        trophyImageView.visibility = View.VISIBLE
     }
 
     private fun humanImageFromDirection(direction: Direction) =

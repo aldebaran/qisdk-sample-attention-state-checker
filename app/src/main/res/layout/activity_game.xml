@@ -19,7 +19,7 @@
         tools:text="LOOK UP" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/humanImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="40dp"
@@ -74,5 +74,21 @@
         app:layout_constraintBaseline_toBaselineOf="@+id/stopButton"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="1/4" />
+
+    <ImageView
+        android:id="@+id/trophyImageView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="64dp"
+        android:layout_marginTop="64dp"
+        android:adjustViewBounds="true"
+        android:scaleType="centerInside"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/trophy"
+        tools:visibility="invisible" />
 
 </android.support.constraint.ConstraintLayout>
