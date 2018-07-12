@@ -14,6 +14,7 @@ import com.softbankrobotics.sample.attentionstatechecker.utils.cancellation
 import com.softbankrobotics.sample.attentionstatechecker.utils.directionObservable
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+import java.util.*
 
 /**
  * The game robot.
@@ -29,6 +30,9 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
     private var expectedDirection: Direction? = null
 
     private var speech: Future<Void>? = null
+
+    private val matchingSentences = listOf("Great!", "Awesome!", "Nice!", "Excellent!")
+    private val matchingSentenceRandom = Random()
 
     override fun onRobotFocusGained(qiContext: QiContext) {
         this.qiContext = qiContext
@@ -105,7 +109,7 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
                 say(text).andThenConsume { gameMachine.postEvent(GameEvent.NotMatchingFinished) }
             }
             is GameState.Matching -> {
-                say("Great!").andThenConsume { gameMachine.postEvent(GameEvent.MatchingFinished) }
+                say(randomMatchingSentence()).andThenConsume { gameMachine.postEvent(GameEvent.MatchingFinished) }
             }
             is GameState.Win -> {
                 say("Impressive! We’ve done it! If you want we can start again.").andThenConsume { gameMachine.postEvent(GameEvent.WinFinished) }
@@ -137,5 +141,10 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
                     speech = newSpeech
                     newSpeech
                 }
+    }
+
+    private fun randomMatchingSentence(): String {
+        val i = matchingSentenceRandom.nextInt(matchingSentences.size)
+        return matchingSentences[i]
     }
 }
