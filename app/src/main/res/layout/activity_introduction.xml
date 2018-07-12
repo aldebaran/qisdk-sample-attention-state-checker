@@ -13,6 +13,7 @@
         android:scaleType="center"
         android:src="@drawable/ic_baseline_close"
         android:tint="@color/navigation_tint_selector"
+        android:contentDescription="@string/close_content_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -24,6 +25,7 @@
         android:layout_marginTop="24dp"
         android:adjustViewBounds="true"
         android:scaleType="centerInside"
+        android:contentDescription="@string/background_content_description"
         app:layout_constraintBottom_toBottomOf="@+id/startButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

@@ -1,7 +1,19 @@
 <resources>
+    <!-- Common -->
     <string name="app_name">AttentionStateChecker</string>
-    <string name="look_instruction">LOOK %1$s</string>
+
+    <!-- Introduction -->
     <string name="let_s_start">\"Let\'s start\"</string>
-    <string name="stop">Stop</string>
+
+    <!-- Game -->
+    <string name="look_instruction">LOOK %1$s</string>
     <string name="progress">%1$d/%2$d</string>
+    <string name="stop">Stop</string>
+
+    <!-- Content descriptions -->
+    <string name="close_content_description">Close button</string>
+    <string name="home_content_description">Home button</string>
+    <string name="background_content_description">Background image</string>
+    <string name="human_content_description">Face image</string>
+    <string name="trophy_content_description">Trophy image</string>
 </resources>
