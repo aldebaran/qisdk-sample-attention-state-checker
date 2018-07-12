@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">AttentionStateChecker</string>
     <string name="look_instruction">LOOK %1$s</string>
-    <string name="question_mark">\?</string>
     <string name="let_s_start">\"Let\'s start\"</string>
     <string name="stop">Stop</string>
     <string name="progress">%1$d/%2$d</string>
