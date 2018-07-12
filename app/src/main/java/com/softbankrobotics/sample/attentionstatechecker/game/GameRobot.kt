@@ -56,6 +56,7 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
     private fun subscribeToGameState() {
         gameStateDisposable = gameMachine.gameState()
                 .subscribeOn(Schedulers.io())
+                .distinctUntilChanged()
                 .observeOn(Schedulers.io())
                 .subscribe(this::handleGameState)
     }

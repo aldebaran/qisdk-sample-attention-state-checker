@@ -58,6 +58,7 @@ class GameActivity : RobotActivity() {
 
         disposables.add(gameMachine.gameState()
                             .subscribeOn(Schedulers.io())
+                            .distinctUntilChanged()
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe(this::handleGameState))
     }
