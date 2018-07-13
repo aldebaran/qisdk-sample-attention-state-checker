@@ -2,8 +2,8 @@ topic: ~introduction()
 
 concept: (start) ["Let's start" "Let's play"]
 
-proposal: %first I will show you my ability to follow your eyes and your sight. ^enableThenGoto(second)
-proposal: %second We can do a little game together. When you're ready, say "Let's start". %start_timer
+proposal: %first I will show you my ability to detect the direction you are looking at. ^enableThenGoto(second)
+proposal: %second We can play a game together. When you are ready, say let's play. %start_timer
     u1: (~start) %start %stop_timer Got it! ^endDiscuss(start)
     u1: (repeat) %stop_timer ^sameProposal
     u1: (e:Dialog/NotUnderstood) %stop_timer Sorry? ^sameProposal

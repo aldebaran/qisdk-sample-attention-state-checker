@@ -3,12 +3,23 @@
     <string name="app_name">AttentionStateChecker</string>
 
     <!-- Introduction -->
-    <string name="let_s_start">\"Let\'s start\"</string>
+    <string name="let_s_play">\"Let\'s play\"</string>
 
     <!-- Game -->
     <string name="look_instruction">LOOK %1$s</string>
     <string name="progress">%1$d/%2$d</string>
     <string name="stop">Stop</string>
+    <string name="briefing_sentence">I will tell you in which direction to look at, and you will have to move your eyes accordingly. Let\'s do this 4 times!</string>
+    <string name="instructions_sentence">Look %1$s.</string>
+    <string name="not_matching_sentence_1">That is %1$s.</string>
+    <string name="not_matching_sentence_2">Too bad! That is %1$s.</string>
+    <string name="not_matching_sentence_3">No! Not %1$s! Here\'s a small tip, do not move your head, just your eyes.</string>
+    <string name="matching_sentence_1">Great!</string>
+    <string name="matching_sentence_2">Awesome!</string>
+    <string name="matching_sentence_3">Nice!</string>
+    <string name="matching_sentence_4">Excellent!</string>
+    <string name="win_sentence">Impressive! You did it! If you want to, we can start again.</string>
+    <string name="stopping_sentence">OK, let\'s take a break.</string>
 
     <!-- Content descriptions -->
     <string name="close_content_description">Close button</string>

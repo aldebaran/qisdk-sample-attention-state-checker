@@ -5,10 +5,12 @@
 
 package com.softbankrobotics.sample.attentionstatechecker.game
 
+import android.support.annotation.StringRes
 import com.aldebaran.qi.Future
 import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
 import com.aldebaran.qi.sdk.builder.SayBuilder
+import com.softbankrobotics.sample.attentionstatechecker.R
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
 import com.softbankrobotics.sample.attentionstatechecker.utils.cancellation
 import com.softbankrobotics.sample.attentionstatechecker.utils.directionObservable
@@ -31,7 +33,13 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
 
     private var speech: Future<Void>? = null
 
-    private val matchingSentences = listOf("Great!", "Awesome!", "Nice!", "Excellent!")
+    private val matchingSentences =
+            listOf(
+                    R.string.matching_sentence_1,
+                    R.string.matching_sentence_2,
+                    R.string.matching_sentence_3,
+                    R.string.matching_sentence_4
+            )
     private val matchingSentenceRandom = Random()
 
     override fun onRobotFocusGained(qiContext: QiContext) {
@@ -94,35 +102,41 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
 
         when (gameState) {
             is GameState.Briefing -> {
-                say("I will give you some directions, and you will have to move your eyes toward them. Let's do this 4 times!").andThenConsume { gameMachine.postEvent(GameEvent.BriefingFinished) }
+                say(R.string.briefing_sentence)
+                        .andThenConsume { gameMachine.postEvent(GameEvent.BriefingFinished) }
             }
             is GameState.Instructions -> {
-                val text = "Look ${gameState.expectedDirection}"
-                say(text).andThenConsume { gameMachine.postEvent(GameEvent.InstructionsFinished) }
+                say(R.string.instructions_sentence, gameState.expectedDirection)
+                        .andThenConsume { gameMachine.postEvent(GameEvent.InstructionsFinished) }
             }
             is GameState.NotMatching -> {
-                val text = if (gameState.consecutiveErrors < 3) {
-                    "Not ${gameState.lookDirection}."
-                } else {
-                    "Not ${gameState.lookDirection}. Little tips: move your eyes, not your head."
+                val resId = when (gameState.consecutiveErrors % 3) {
+                    1 -> R.string.not_matching_sentence_1
+                    2 -> R.string.not_matching_sentence_2
+                    0 -> R.string.not_matching_sentence_3
+                    else -> throw IllegalStateException("Missing case for NotMatching sentence.")
                 }
 
-                say(text).andThenConsume { gameMachine.postEvent(GameEvent.NotMatchingFinished) }
+                say(resId, gameState.lookDirection)
+                        .andThenConsume { gameMachine.postEvent(GameEvent.NotMatchingFinished) }
             }
             is GameState.Matching -> {
-                say(randomMatchingSentence()).andThenConsume { gameMachine.postEvent(GameEvent.MatchingFinished) }
+                say(randomMatchingSentence())
+                        .andThenConsume { gameMachine.postEvent(GameEvent.MatchingFinished) }
             }
             is GameState.Win -> {
-                say("Impressive! We’ve done it! If you want we can start again.").andThenConsume { gameMachine.postEvent(GameEvent.WinFinished) }
+                say(R.string.win_sentence)
+                        .andThenConsume { gameMachine.postEvent(GameEvent.WinFinished) }
             }
             is GameState.Stopping -> {
-                say("Ok, let's have a break.").andThenConsume { gameMachine.postEvent(GameEvent.Stopped) }
+                say(R.string.stopping_sentence)
+                        .andThenConsume { gameMachine.postEvent(GameEvent.Stopped) }
             }
         }
     }
 
     private fun handleDirection(direction: Direction) {
-        val expectedDirection = expectedDirection ?: throw IllegalStateException("No expected direction!")
+        val expectedDirection = expectedDirection ?: throw IllegalStateException("Not expected direction!")
 
         if (directionsMatcher.matches(expectedDirection, direction)) {
             gameMachine.postEvent(GameEvent.Match)
@@ -131,11 +145,11 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
         }
     }
 
-    private fun say(text: String): Future<Void> {
+    private fun say(@StringRes resId: Int, vararg formatArgs: Any): Future<Void> {
         return speech.cancellation()
                 .andThenCompose {
                     val newSpeech = SayBuilder.with(qiContext)
-                            .withText(text)
+                            .withText(qiContext?.getString(resId, *formatArgs))
                             .buildAsync()
                             .andThenCompose { it.async().run() }
 
@@ -144,7 +158,8 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
                 }
     }
 
-    private fun randomMatchingSentence(): String {
+    @StringRes
+    private fun randomMatchingSentence(): Int {
         val i = matchingSentenceRandom.nextInt(matchingSentences.size)
         return matchingSentences[i]
     }
