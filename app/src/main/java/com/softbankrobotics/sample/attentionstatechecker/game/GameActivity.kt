@@ -196,6 +196,7 @@ class GameActivity : RobotActivity() {
     }
 
     private fun playSound(@RawRes resource: Int) {
+        mediaPlayer?.release()
         mediaPlayer = MediaPlayer.create(this, resource).apply { start() }
     }
 
