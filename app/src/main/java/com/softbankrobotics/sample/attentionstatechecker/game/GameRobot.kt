@@ -147,9 +147,9 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
 
     private fun say(@StringRes resId: Int, vararg formatArgs: Any): Future<Void> {
         return speech.cancellation()
-                .andThenCompose {
+                .andThenCompose { _ ->
                     val newSpeech = SayBuilder.with(qiContext)
-                            .withText(qiContext?.getString(resId, *formatArgs))
+                            .withResource(resId, *formatArgs)
                             .buildAsync()
                             .andThenCompose { it.async().run() }
 
