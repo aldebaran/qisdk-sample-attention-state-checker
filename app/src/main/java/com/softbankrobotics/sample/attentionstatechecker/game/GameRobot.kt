@@ -5,7 +5,7 @@
 
 package com.softbankrobotics.sample.attentionstatechecker.game
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import com.aldebaran.qi.Future
 import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks

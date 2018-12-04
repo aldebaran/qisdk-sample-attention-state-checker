@@ -8,7 +8,7 @@ package com.softbankrobotics.sample.attentionstatechecker.game
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.support.annotation.RawRes
+import androidx.annotation.RawRes
 import android.view.View
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
