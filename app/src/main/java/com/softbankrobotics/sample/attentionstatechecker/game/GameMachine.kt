@@ -1,8 +1,7 @@
 /*
- * Copyright (C) 2018 Softbank Robotics Europe
- * See COPYING for the license
+ * Copyright (C) 2018 SoftBank Robotics Europe
+ * See COPYING for the licence
  */
-
 package com.softbankrobotics.sample.attentionstatechecker.game
 
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction
@@ -26,7 +25,8 @@ internal class GameMachine {
     fun gameState(): Observable<GameState> = subject
 
     fun postEvent(gameEvent: GameEvent) {
-        val currentState = subject.value ?: throw IllegalStateException("GameMachine must have a GameState to be able to handle a GameEvent.")
+        val currentState = subject.value
+                ?: throw IllegalStateException("GameMachine must have a GameState to be able to handle a GameEvent.")
         val nextState = reduce(currentState, gameEvent)
         subject.onNext(nextState)
     }
@@ -68,12 +68,12 @@ internal class GameMachine {
     }
 
     private fun nextInstruction(): GameState =
-        if (directions.isNotEmpty()) {
-            consecutiveErrors = 0
-            GameState.Instructions(directions.poll(), matchedDirections, totalDirections)
-        } else {
-            GameState.Win
-        }
+            if (directions.isNotEmpty()) {
+                consecutiveErrors = 0
+                GameState.Instructions(directions.poll(), matchedDirections, totalDirections)
+            } else {
+                GameState.Win
+            }
 
     private fun computeDirections() {
         directions = LinkedList(listOf(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT).shuffled())

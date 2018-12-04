@@ -1,8 +1,7 @@
 /*
- * Copyright (C) 2018 Softbank Robotics Europe
- * See COPYING for the license
+ * Copyright (C) 2018 SoftBank Robotics Europe
+ * See COPYING for the licence
  */
-
 @file:JvmName("DirectionUtils")
 
 package com.softbankrobotics.sample.attentionstatechecker.utils
@@ -28,4 +27,3 @@ fun directionObservable(qiContext: QiContext): Observable<Direction> {
             .distinctUntilChanged()
             .filter { direction -> direction != Direction.UNKNOWN }
 }
-

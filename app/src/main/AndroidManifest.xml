@@ -10,15 +10,22 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".introduction.IntroductionActivity"
+
+        <activity
+            android:name=".introduction.IntroductionActivity"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+            </intent-filter>
         </activity>
-        <activity android:name=".game.GameActivity" />
-    </application>
 
+        <activity android:name=".game.GameActivity" />
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a0063537e19980b45bc08374ae8407f9301558c7" />
+    </application>
 </manifest>

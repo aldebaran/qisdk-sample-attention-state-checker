@@ -1,15 +1,14 @@
 /*
- * Copyright (C) 2018 Softbank Robotics Europe
- * See COPYING for the license
+ * Copyright (C) 2018 SoftBank Robotics Europe
+ * See COPYING for the licence
  */
-
 package com.softbankrobotics.sample.attentionstatechecker.game
 
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
-import androidx.annotation.RawRes
 import android.view.View
+import androidx.annotation.RawRes
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
 import com.aldebaran.qi.sdk.design.activity.conversationstatus.SpeechBarDisplayStrategy
@@ -57,10 +56,10 @@ class GameActivity : RobotActivity() {
         stopButton.isChecked = false
 
         disposables.add(gameMachine.gameState()
-                            .subscribeOn(Schedulers.io())
-                            .distinctUntilChanged()
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(this::handleGameState))
+                .subscribeOn(Schedulers.io())
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(this::handleGameState))
     }
 
     override fun onPause() {
@@ -161,13 +160,13 @@ class GameActivity : RobotActivity() {
     }
 
     private fun humanImageFromDirection(direction: Direction) =
-        when (direction) {
-            UP -> R.drawable.ic_user_face_up
-            DOWN -> R.drawable.ic_user_face_down
-            LEFT -> R.drawable.ic_user_face_left
-            RIGHT -> R.drawable.ic_user_face_right
-            else -> throw IllegalStateException("Unknown direction $direction")
-        }
+            when (direction) {
+                UP -> R.drawable.ic_user_face_up
+                DOWN -> R.drawable.ic_user_face_down
+                LEFT -> R.drawable.ic_user_face_left
+                RIGHT -> R.drawable.ic_user_face_right
+                else -> throw IllegalStateException("Unknown direction $direction")
+            }
 
     private fun hideProgress() {
         progressTextView.visibility = View.INVISIBLE

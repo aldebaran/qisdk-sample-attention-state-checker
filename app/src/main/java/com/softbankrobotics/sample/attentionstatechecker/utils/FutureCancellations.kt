@@ -1,8 +1,7 @@
 /*
- * Copyright (C) 2018 Softbank Robotics Europe
- * See COPYING for the license
+ * Copyright (C) 2018 SoftBank Robotics Europe
+ * See COPYING for the licence
  */
-
 @file:JvmName("FutureCancellations")
 
 package com.softbankrobotics.sample.attentionstatechecker.utils
@@ -20,5 +19,5 @@ fun Future<*>?.cancellation(): Future<Void> {
     }
 
     requestCancellation()
-    return thenApply { _ -> null }
+    return thenApply { null }
 }

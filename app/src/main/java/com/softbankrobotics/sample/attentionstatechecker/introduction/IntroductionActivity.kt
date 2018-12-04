@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2018 SoftBank Robotics Europe
+ * See COPYING for the licence
+ */
 package com.softbankrobotics.sample.attentionstatechecker.introduction
 
 import android.content.Intent
@@ -66,8 +70,8 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
         shouldRepeatWithTimer.set(true)
 
         val topic = TopicBuilder.with(qiContext)
-                        .withResource(R.raw.introduction)
-                        .build()
+                .withResource(R.raw.introduction)
+                .build()
 
         val bookmarks = topic.bookmarks
         val firstBookmark = bookmarks[FIRST_BOOKMARK]
@@ -75,8 +79,8 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
         startBookmark = bookmarks[START_BOOKMARK]
 
         qiChatbot = QiChatbotBuilder.with(qiContext)
-                            .withTopic(topic)
-                            .build()
+                .withTopic(topic)
+                .build()
 
         qiChatbot?.addOnBookmarkReachedListener {
             when (it.name) {
@@ -90,8 +94,8 @@ class IntroductionActivity : RobotActivity(), RobotLifecycleCallbacks {
         qiChatbot?.addOnEndedListener { goToGame() }
 
         chat = ChatBuilder.with(qiContext)
-                    .withChatbot(qiChatbot)
-                    .build()
+                .withChatbot(qiChatbot)
+                .build()
 
         chat?.addOnStartedListener {
             if (startAtHome) {

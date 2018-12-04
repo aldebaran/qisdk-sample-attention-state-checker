@@ -1,8 +1,7 @@
 /*
- * Copyright (C) 2018 Softbank Robotics Europe
- * See COPYING for the license
+ * Copyright (C) 2018 SoftBank Robotics Europe
+ * See COPYING for the licence
  */
-
 @file:JvmName("FrameUtils")
 
 package com.softbankrobotics.sample.attentionstatechecker.utils
@@ -32,5 +31,5 @@ fun Frame.distanceFrom(frame: Frame): Double {
 fun Frame.distanceObservableFrom(frame: Frame): Observable<Double> {
     return Observable.interval(1, TimeUnit.SECONDS)
             .observeOn(Schedulers.io())
-            .map { _ -> distanceFrom(frame) }
+            .map { distanceFrom(frame) }
 }

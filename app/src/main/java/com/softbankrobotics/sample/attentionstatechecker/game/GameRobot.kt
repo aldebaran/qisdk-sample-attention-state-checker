@@ -1,8 +1,7 @@
 /*
- * Copyright (C) 2018 Softbank Robotics Europe
- * See COPYING for the license
+ * Copyright (C) 2018 SoftBank Robotics Europe
+ * See COPYING for the licence
  */
-
 package com.softbankrobotics.sample.attentionstatechecker.game
 
 import androidx.annotation.StringRes
@@ -136,7 +135,8 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
     }
 
     private fun handleDirection(direction: Direction) {
-        val expectedDirection = expectedDirection ?: throw IllegalStateException("Not expected direction!")
+        val expectedDirection = expectedDirection
+                ?: throw IllegalStateException("Not expected direction!")
 
         if (directionsMatcher.matches(expectedDirection, direction)) {
             gameMachine.postEvent(GameEvent.Match)
@@ -147,7 +147,7 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
 
     private fun say(@StringRes resId: Int, vararg formatArgs: Any): Future<Void> {
         return speech.cancellation()
-                .andThenCompose { _ ->
+                .andThenCompose {
                     val newSpeech = SayBuilder.with(qiContext)
                             .withResource(resId, *formatArgs)
                             .buildAsync()

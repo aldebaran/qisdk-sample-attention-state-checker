@@ -1,8 +1,7 @@
 /*
- * Copyright (C) 2018 Softbank Robotics Europe
- * See COPYING for the license
+ * Copyright (C) 2018 SoftBank Robotics Europe
+ * See COPYING for the licence
  */
-
 package com.softbankrobotics.sample.attentionstatechecker.model.data
 
 import com.aldebaran.qi.sdk.`object`.human.AttentionState
