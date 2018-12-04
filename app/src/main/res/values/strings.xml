@@ -1,6 +1,6 @@
 <resources>
     <!-- Common -->
-    <string name="app_name">AttentionStateChecker</string>
+    <string name="app_name">Attention State Checker Sample</string>
 
     <!-- Introduction -->
     <string name="let_s_play">\"Let\'s play\"</string>
