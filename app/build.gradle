@@ -6,12 +6,12 @@ apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.softbankrobotics.sample.attentionstatechecker"
+        applicationId 'com.softbankrobotics.sample.attentionstatechecker'
         minSdkVersion 23
         targetSdkVersion 28
         versionCode 5
-        versionName "2.1.2"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        versionName '2.1.2'
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -27,7 +27,8 @@ android {
 }
 
 dependencies {
-    // "libs" folder
+
+    // 'libs' folder
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     // Kotlin

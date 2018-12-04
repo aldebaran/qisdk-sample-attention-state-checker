@@ -23,7 +23,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'http://android.aldebaran.com/sdk-beta/maven' }
+        maven { url 'https://android.aldebaran.com/sdk/maven' }
     }
 }
 

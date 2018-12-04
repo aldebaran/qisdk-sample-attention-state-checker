@@ -10,10 +10,10 @@
         android:id="@+id/closeButton"
         android:layout_width="73dp"
         android:layout_height="60dp"
+        android:contentDescription="@string/close_content_description"
         android:scaleType="center"
         android:src="@drawable/ic_baseline_close"
         android:tint="@color/navigation_tint_selector"
-        android:contentDescription="@string/close_content_description"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -21,17 +21,17 @@
         android:id="@+id/backgroundImageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="24dp"
         android:layout_marginTop="24dp"
+        android:layout_marginBottom="24dp"
         android:adjustViewBounds="true"
-        android:scaleType="centerInside"
         android:contentDescription="@string/background_content_description"
+        android:scaleType="centerInside"
         app:layout_constraintBottom_toBottomOf="@+id/startButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/pepper_explaination" />
+        app:srcCompat="@drawable/pepper_explanation" />
 
     <RadioButton
         android:id="@+id/startButton"
