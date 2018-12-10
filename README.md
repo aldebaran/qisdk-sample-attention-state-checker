@@ -9,7 +9,7 @@ It uses [RxJava](https://github.com/ReactiveX/RxJava) to get a continuous stream
 ## Minimum Configuration
 
 * Pepper 1.9.
-* API Level 3.
+* API level 3.
 * A real robot (does not work on a virtual robot).
 
 ## License
