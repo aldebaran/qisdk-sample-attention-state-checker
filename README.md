@@ -12,6 +12,6 @@ It uses [RxJava](https://github.com/ReactiveX/RxJava) to get a continuous stream
 * API Level 3.
 * A real robot (does not work on a virtual robot).
 
-## Licence
+## License
 
-See the [COPYING](COPYING.md) file for the licence.
+See the [COPYING](COPYING.md) file for the license.
