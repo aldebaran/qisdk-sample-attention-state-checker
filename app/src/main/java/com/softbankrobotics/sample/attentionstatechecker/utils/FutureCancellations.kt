@@ -19,5 +19,5 @@ fun Future<*>?.cancellation(): Future<Void> {
     }
 
     requestCancellation()
-    return thenApply { null }
+    return thenApply { _ -> null }
 }
