@@ -48,4 +48,8 @@ dependencies {
 
     // Crashlytics
     implementation('com.crashlytics.sdk.android:crashlytics:2.9.4@aar') { transitive = true }
+
+    // Tests
+    testImplementation "junit:junit:4.13"
+    testImplementation "io.mockk:mockk:1.9.3"
 }
