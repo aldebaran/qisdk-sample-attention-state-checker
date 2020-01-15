@@ -21,21 +21,25 @@ class MyObservablesTest {
 
     private val testScheduler = TestScheduler()
 
+    private companion object {
+        const val FRAME_UTILS_CLASSNAME = "com.softbankrobotics.sample.attentionstatechecker.utils.FrameUtils"
+    }
+
     @Before
     fun setUp() {
         RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
         RxJavaPlugins.setIoSchedulerHandler { testScheduler }
+        mockkStatic(FRAME_UTILS_CLASSNAME)
     }
 
     @After
     fun tearDown() {
         RxJavaPlugins.reset()
+        unmockkStatic(FRAME_UTILS_CLASSNAME)
     }
 
     @Test
     fun humanDataListObservable_provides_list_of_human_data() {
-        mockkStatic("com.softbankrobotics.sample.attentionstatechecker.utils.FrameUtils")
-
         val robotFrame = mockk<Frame>(relaxed = true)
         val actuation = mockk<Actuation>(relaxed = true) {
             every { robotFrame() } returns robotFrame
@@ -64,8 +68,6 @@ class MyObservablesTest {
 
     @Test
     fun humanDataListObservable_notifies_when_humans_list_changes() {
-        mockkStatic("com.softbankrobotics.sample.attentionstatechecker.utils.FrameUtils")
-
         val listenerSlot = slot<HumanAwareness.OnHumansAroundChangedListener>()
 
         val robotFrame = mockk<Frame>(relaxed = true)
@@ -101,8 +103,6 @@ class MyObservablesTest {
 
     @Test
     fun humanDataListObservable_notifies_when_human_attention_changes() {
-        mockkStatic("com.softbankrobotics.sample.attentionstatechecker.utils.FrameUtils")
-
         val listenerSlot = slot<Human.OnAttentionChangedListener>()
 
         val robotFrame = mockk<Frame>(relaxed = true)
@@ -137,8 +137,6 @@ class MyObservablesTest {
 
     @Test
     fun humanDataListObservable_notifies_when_human_distance_changes() {
-        mockkStatic("com.softbankrobotics.sample.attentionstatechecker.utils.FrameUtils")
-
         val robotFrame = mockk<Frame>(relaxed = true)
         val actuation = mockk<Actuation>(relaxed = true) {
             every { robotFrame() } returns robotFrame
