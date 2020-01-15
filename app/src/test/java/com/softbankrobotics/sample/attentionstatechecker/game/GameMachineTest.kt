@@ -1,9 +1,10 @@
 package com.softbankrobotics.sample.attentionstatechecker.game
 
+import com.softbankrobotics.sample.attentionstatechecker.assertLastValue
+import com.softbankrobotics.sample.attentionstatechecker.assertLastValueIs
 import com.softbankrobotics.sample.attentionstatechecker.game.GameEvent.*
 import com.softbankrobotics.sample.attentionstatechecker.game.GameState.*
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction.*
-import io.reactivex.observers.TestObserver
 import org.junit.Test
 
 class GameMachineTest {
@@ -197,13 +198,5 @@ class GameMachineTest {
 
     private fun GameMachine.postAll(vararg events: GameEvent) {
         events.forEach { postEvent(it) }
-    }
-
-    private fun <T> TestObserver<T>.assertLastValueIs(value: T) {
-        assertValueAt(valueCount() - 1, value)
-    }
-
-    private fun <T> TestObserver<T>.assertLastValue(predicate: (T) -> Boolean) {
-        assertValueAt(valueCount() - 1, predicate)
     }
 }
