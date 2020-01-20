@@ -28,7 +28,6 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
     private var qiContext: QiContext? = null
     private var gameStateDisposable: Disposable? = null
     private var directionDisposable: Disposable? = null
-    private var expectedDirection: Direction? = null
 
     private var speech: Future<Void>? = null
 
@@ -75,12 +74,12 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
     private fun subscribeToDirections(expectedDirection: Direction) {
         synchronized(lock) {
             qiContext?.takeIf { directionDisposable == null }?.let { context ->
-                this.expectedDirection = expectedDirection
-
                 directionDisposable = directionObservable(context)
                         .subscribeOn(Schedulers.io())
                         .observeOn(Schedulers.io())
-                        .subscribe(this::handleDirection)
+                        .subscribe { lookDirection ->
+                            handleDirection(lookDirection, expectedDirection)
+                        }
             }
         }
     }
@@ -134,14 +133,11 @@ internal class GameRobot(private val gameMachine: GameMachine) : RobotLifecycleC
         }
     }
 
-    private fun handleDirection(direction: Direction) {
-        val expectedDirection = expectedDirection
-                ?: throw IllegalStateException("Not expected direction!")
-
-        if (directionsMatcher.matches(expectedDirection, direction)) {
+    private fun handleDirection(lookDirection: Direction, expectedDirection: Direction) {
+        if (directionsMatcher.matches(expectedDirection, lookDirection)) {
             gameMachine.postEvent(GameEvent.Match)
         } else {
-            gameMachine.postEvent(GameEvent.NotMatch(direction))
+            gameMachine.postEvent(GameEvent.NotMatch(lookDirection))
         }
     }
 
