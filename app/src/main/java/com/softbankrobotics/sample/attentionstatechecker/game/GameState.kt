@@ -18,5 +18,5 @@ internal sealed class GameState {
     data class Matching(val matchingDirection: Direction, val matched: Int, val total: Int) : GameState()
     object Win : GameState()
     object End : GameState()
-    data class Stopping(val matched: Int, val total: Int) : GameState()
+    object Stopping : GameState()
 }

@@ -173,7 +173,7 @@ class GameMachineTest {
                 BriefingFinished,
                 Stop
         )
-        observer.assertLastValueIs(Stopping(0, 4))
+        observer.assertLastValueIs(Stopping)
     }
 
     @Test
