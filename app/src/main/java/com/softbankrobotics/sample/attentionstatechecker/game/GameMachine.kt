@@ -12,10 +12,16 @@ import java.util.*
 /**
  * A game machine.
  */
-internal class GameMachine {
+internal class GameMachine(
+        private val directionsProvider: DirectionsProvider = DirectionsProvider()
+) {
 
-    private var directions: Queue<Direction> = LinkedList()
-    private var totalDirections = directions.size
+    private var totalDirections = 0
+    private var remainingDirections = LinkedList<Direction>()
+        set(value) {
+            totalDirections = value.size
+            field = value
+        }
 
     private val subject = BehaviorSubject.createDefault<GameState>(GameState.Idle)
 
@@ -35,10 +41,9 @@ internal class GameMachine {
             is GameEvent.FocusLost ->
                 return GameState.Idle
             is GameEvent.BriefingFinished -> if (currentState === GameState.Briefing) {
-                directions = LinkedList(listOf(Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT).shuffled())
-                totalDirections = directions.size
-                return if (directions.isNotEmpty()) {
-                    GameState.Instructions(directions.poll(), 0, 0, totalDirections)
+                remainingDirections = directionsProvider.provideDirections()
+                return if (remainingDirections.isNotEmpty()) {
+                    GameState.Instructions(remainingDirections.poll(), 0, 0, totalDirections)
                 } else {
                     GameState.Win
                 }
@@ -52,8 +57,8 @@ internal class GameMachine {
                 return GameState.NotMatching(currentState.expectedDirection, gameEvent.lookDirection, currentState.consecutiveErrors + 1, currentState.matched, totalDirections)
             }
             is GameEvent.MatchingFinished -> if (currentState is GameState.Matching)
-                return if (directions.isNotEmpty()) {
-                    GameState.Instructions(directions.poll(), 0, currentState.matched, totalDirections)
+                return if (remainingDirections.isNotEmpty()) {
+                    GameState.Instructions(remainingDirections.poll(), 0, currentState.matched, totalDirections)
                 } else {
                     GameState.Win
                 }
