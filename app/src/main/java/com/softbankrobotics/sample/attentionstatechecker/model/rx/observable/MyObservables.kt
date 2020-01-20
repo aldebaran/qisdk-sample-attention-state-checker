@@ -10,7 +10,6 @@ import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.`object`.actuation.Frame
 import com.aldebaran.qi.sdk.`object`.human.AttentionState
 import com.aldebaran.qi.sdk.`object`.human.Human
-import com.aldebaran.qi.sdk.`object`.humanawareness.HumanAwareness
 import com.softbankrobotics.sample.attentionstatechecker.model.data.HumanData
 import com.softbankrobotics.sample.attentionstatechecker.utils.distanceObservableFrom
 import io.reactivex.Observable
@@ -106,48 +105,6 @@ private class AttentionStateObservable(private val human: Human) : Observable<At
         override fun dispose() {
             if (unSubscribed.compareAndSet(false, true)) {
                 human.removeOnAttentionChangedListener(this)
-            }
-        }
-
-        override fun isDisposed(): Boolean {
-            return unSubscribed.get()
-        }
-    }
-}
-
-/**
- * Observable providing the list of humans from [HumanAwareness], using the [HumanAwareness.OnHumansAroundChangedListener].
- *
- * <br></br>
- *
- * Note: Code inspired from Jake Wharton's [RxBinding](https://github.com/JakeWharton/RxBinding) library
- * to convert listeners into observables.
- */
-private class HumansAroundObservable(private val humanAwareness: HumanAwareness) : Observable<List<Human>>() {
-
-    override fun subscribeActual(observer: Observer<in List<Human>>) {
-        // Create a listener to subscribe to HumanAwareness.OnHumansAroundChangedListener.
-        val listener = Listener(humanAwareness, observer)
-        // Link the disposable to the observer subscription.
-        observer.onSubscribe(listener)
-        // Get current value.
-        observer.onNext(humanAwareness.humansAround)
-        // Subscribe the listener to HumanAwareness.OnHumansAroundChangedListener.
-        humanAwareness.addOnHumansAroundChangedListener(listener)
-    }
-
-    private class Listener(private val humanAwareness: HumanAwareness, private val observer: Observer<in List<Human>>) : Disposable, HumanAwareness.OnHumansAroundChangedListener {
-        private val unSubscribed = AtomicBoolean(false)
-
-        override fun onHumansAroundChanged(humans: MutableList<Human>) {
-            if (!isDisposed) {
-                observer.onNext(humans)
-            }
-        }
-
-        override fun dispose() {
-            if (unSubscribed.compareAndSet(false, true)) {
-                humanAwareness.removeOnHumansAroundChangedListener(this)
             }
         }
 
