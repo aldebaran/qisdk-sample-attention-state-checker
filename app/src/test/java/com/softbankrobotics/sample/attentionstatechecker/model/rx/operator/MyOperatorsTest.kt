@@ -30,7 +30,7 @@ class MyOperatorsTest {
 
     @Test
     fun attentionState_gives_empty_wrapper_when_no_HumanData() {
-        val observable = Observable.just(Wrapper.empty<HumanData>())
+        val observable = Observable.just(Wrapper.empty())
         observable.attentionState()
                 .test()
                 .assertValue(Wrapper.empty())
@@ -48,7 +48,7 @@ class MyOperatorsTest {
 
     @Test
     fun direction_gives_UNKNOWN_when_no_AttentionState() {
-        val observable = Observable.just(Wrapper.empty<AttentionState>())
+        val observable = Observable.just(Wrapper.empty())
         observable.direction()
                 .test()
                 .assertValue(Direction.UNKNOWN)

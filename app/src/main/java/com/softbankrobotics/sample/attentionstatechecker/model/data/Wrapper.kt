@@ -11,11 +11,10 @@ package com.softbankrobotics.sample.attentionstatechecker.model.data
 data class Wrapper<out T : Any>(val content: T? = null) {
 
     companion object {
-        private val EMPTY = Wrapper<Any>()
+        private val EMPTY = Wrapper<Nothing>()
 
-        @Suppress("UNCHECKED_CAST")
-        fun <T : Any> empty(): Wrapper<T> {
-            return EMPTY as Wrapper<T>
+        fun empty(): Wrapper<Nothing> {
+            return EMPTY
         }
 
         fun <T : Any> of(content: T): Wrapper<T> {

@@ -7,7 +7,7 @@ class WrapperTest {
 
     @Test
     fun empty_has_null_content() {
-        val wrapper = Wrapper.empty<Nothing>()
+        val wrapper = Wrapper.empty()
         assertNull(wrapper.content)
     }
 
