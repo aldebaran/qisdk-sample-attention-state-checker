@@ -1,15 +1,20 @@
 package com.softbankrobotics.sample.attentionstatechecker.game
 
-import com.softbankrobotics.sample.attentionstatechecker.assertLastValue
 import com.softbankrobotics.sample.attentionstatechecker.assertLastValueIs
 import com.softbankrobotics.sample.attentionstatechecker.game.GameEvent.*
 import com.softbankrobotics.sample.attentionstatechecker.game.GameState.*
 import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction.*
+import io.mockk.every
+import io.mockk.mockk
 import org.junit.Test
+import java.util.*
 
 class GameMachineTest {
 
-    private val machine = GameMachine()
+    private val directionsProvider = mockk<DirectionsProvider> {
+        every { provideDirections() } returns LinkedList(listOf(UP, DOWN, LEFT, RIGHT))
+    }
+    private val machine = GameMachine(directionsProvider)
     private val observer = machine.gameState().test()
 
     @Test
@@ -33,16 +38,23 @@ class GameMachineTest {
     }
 
     @Test
-    fun Briefing_then_BriefingFinished_gives_Instructions() {
+    fun Briefing_then_BriefingFinished_gives_Instructions_when_directions_is_not_empty() {
         machine.postAll(
                 FocusGained,
                 BriefingFinished
         )
-        observer.assertLastValue {
-            return@assertLastValue (it is Instructions) &&
-                    (it.matched == 0) &&
-                    (it.total == 4)
-        }
+        observer.assertLastValueIs(Instructions(UP, 0, 0, 4))
+    }
+
+    @Test
+    fun Briefing_then_BriefingFinished_gives_Win_when_directions_is_empty() {
+        every { directionsProvider.provideDirections() } returns LinkedList()
+
+        machine.postAll(
+                FocusGained,
+                BriefingFinished
+        )
+        observer.assertLastValueIs(Win)
     }
 
     @Test
@@ -52,11 +64,7 @@ class GameMachineTest {
                 BriefingFinished,
                 InstructionsFinished
         )
-        observer.assertLastValue {
-            return@assertLastValue (it is Playing) &&
-                    (it.matched == 0) &&
-                    (it.total == 4)
-        }
+        observer.assertLastValueIs(Playing(UP, 0, 0, 4))
     }
 
     @Test
@@ -67,11 +75,7 @@ class GameMachineTest {
                 InstructionsFinished,
                 Match
         )
-        observer.assertLastValue {
-            return@assertLastValue (it is Matching) &&
-                    (it.matched == 1) &&
-                    (it.total == 4)
-        }
+        observer.assertLastValueIs(Matching(UP, 1, 4))
     }
 
     @Test
@@ -80,15 +84,9 @@ class GameMachineTest {
                 FocusGained,
                 BriefingFinished,
                 InstructionsFinished,
-                NotMatch(UP)
+                NotMatch(DOWN)
         )
-        observer.assertLastValue {
-            return@assertLastValue (it is NotMatching) &&
-                    (it.lookDirection == UP) &&
-                    (it.consecutiveErrors == 1) &&
-                    (it.matched == 0) &&
-                    (it.total == 4)
-        }
+        observer.assertLastValueIs(NotMatching(UP, DOWN, 1, 0, 4))
     }
 
     @Test
@@ -100,27 +98,7 @@ class GameMachineTest {
                 Match,
                 MatchingFinished
         )
-        observer.assertLastValue {
-            return@assertLastValue (it is Instructions) &&
-                    (it.matched == 1) &&
-                    (it.total == 4)
-        }
-    }
-
-    @Test
-    fun NotMatching_then_NotMatchingFinished_gives_Instructions() {
-        machine.postAll(
-                FocusGained,
-                BriefingFinished,
-                InstructionsFinished,
-                NotMatch(UP),
-                NotMatchingFinished
-        )
-        observer.assertLastValue {
-            return@assertLastValue (it is Instructions) &&
-                    (it.matched == 0) &&
-                    (it.total == 4)
-        }
+        observer.assertLastValueIs(Instructions(DOWN, 0, 1, 4))
     }
 
     @Test
@@ -142,6 +120,18 @@ class GameMachineTest {
                 MatchingFinished
         )
         observer.assertLastValueIs(Win)
+    }
+
+    @Test
+    fun NotMatching_then_NotMatchingFinished_gives_Instructions() {
+        machine.postAll(
+                FocusGained,
+                BriefingFinished,
+                InstructionsFinished,
+                NotMatch(DOWN),
+                NotMatchingFinished
+        )
+        observer.assertLastValueIs(Instructions(UP, 1, 0, 4))
     }
 
     @Test
