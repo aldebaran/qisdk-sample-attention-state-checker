@@ -13,11 +13,8 @@ import com.aldebaran.qi.sdk.`object`.human.Human
 import com.softbankrobotics.sample.attentionstatechecker.model.data.HumanData
 import com.softbankrobotics.sample.attentionstatechecker.utils.distanceObservableFrom
 import io.reactivex.Observable
-import io.reactivex.Observer
-import io.reactivex.disposables.Disposable
 import io.reactivex.functions.BiFunction
 import java.util.concurrent.TimeUnit
-import java.util.concurrent.atomic.AtomicBoolean
 
 /**
  * Provide an observable of the list of [HumanData] corresponding to the list of humans around the robot.
@@ -70,46 +67,4 @@ private fun humanDataObservable(human: Human,
 @Suppress("UNCHECKED_CAST")
 private fun <T> combineLatestToList(observables: List<Observable<T>>): Observable<List<T>> {
     return Observable.combineLatest(observables) { objects -> objects.toList() as List<T> }
-}
-
-/**
- * Observable providing the [AttentionState] of a [Human], using the [Human.OnAttentionChangedListener].
- *
- * <br></br>
- *
- * Note: Code inspired from Jake Wharton's [RxBinding](https://github.com/JakeWharton/RxBinding) library
- * to convert listeners into observables.
- */
-private class AttentionStateObservable(private val human: Human) : Observable<AttentionState>() {
-
-    override fun subscribeActual(observer: Observer<in AttentionState>) {
-        // Create a listener to subscribe to Human.OnAttentionChangedListener.
-        val listener = Listener(human, observer)
-        // Link the disposable to the observer subscription.
-        observer.onSubscribe(listener)
-        // Get current value.
-        observer.onNext(human.attention)
-        // Subscribe the listener to Human.OnAttentionChangedListener.
-        human.addOnAttentionChangedListener(listener)
-    }
-
-    private class Listener(private val human: Human, private val observer: Observer<in AttentionState>) : Disposable, Human.OnAttentionChangedListener {
-        private val unSubscribed = AtomicBoolean(false)
-
-        override fun onAttentionChanged(attention: AttentionState) {
-            if (!isDisposed) {
-                observer.onNext(attention)
-            }
-        }
-
-        override fun dispose() {
-            if (unSubscribed.compareAndSet(false, true)) {
-                human.removeOnAttentionChangedListener(this)
-            }
-        }
-
-        override fun isDisposed(): Boolean {
-            return unSubscribed.get()
-        }
-    }
 }

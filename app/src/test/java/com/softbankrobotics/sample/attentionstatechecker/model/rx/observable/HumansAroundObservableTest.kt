@@ -10,15 +10,16 @@ import org.junit.Test
 class HumansAroundObservableTest {
 
     private val initialHumans = listOf<Human>()
-    private val humanAwareness = mockk<HumanAwareness>(relaxed = true)
     private val listenerSlot = slot<HumanAwareness.OnHumansAroundChangedListener>()
+    private val humanAwareness = mockk<HumanAwareness>(relaxed = true) {
+        every { humansAround } returns initialHumans
+        every { addOnHumansAroundChangedListener(capture(listenerSlot)) } just Runs
+    }
     private val observable = HumansAroundObservable(humanAwareness)
     private val observer = TestObserver<List<Human>>()
 
     @Before
     fun setUp() {
-        every { humanAwareness.humansAround } returns initialHumans
-        every { humanAwareness.addOnHumansAroundChangedListener(capture(listenerSlot)) } just Runs
         observable.subscribe(observer)
     }
 
