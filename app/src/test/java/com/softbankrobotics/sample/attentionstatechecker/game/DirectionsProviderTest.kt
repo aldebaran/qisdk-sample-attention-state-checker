@@ -8,8 +8,12 @@ import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction.*
 import org.junit.Assert.*
 import org.junit.Test
 
+/**
+ * Tests for [DirectionsProvider].
+ */
 class DirectionsProviderTest {
 
+    // System under tests.
     private val directionsProvider = DirectionsProvider()
 
     @Test

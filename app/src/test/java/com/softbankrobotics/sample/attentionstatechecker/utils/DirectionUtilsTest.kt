@@ -18,9 +18,13 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Tests for [directionObservable].
+ */
 class DirectionUtilsTest {
 
     private companion object {
+        // Used to mock methods in this file.
         const val MY_OBSERVABLES_CLASSNAME = "com.softbankrobotics.sample.attentionstatechecker.model.rx.observable.MyObservables"
     }
 

@@ -9,12 +9,16 @@ import com.softbankrobotics.sample.attentionstatechecker.model.data.Direction.*
 import org.junit.Assert.*
 import org.junit.Test
 
+/**
+ * Tests for [DirectionsMatcher].
+ */
 class DirectionsMatcherTest {
 
+    // System under tests.
     private val matcher = DirectionsMatcher()
 
     @Test
-    fun matches_UP() {
+    fun matches_for_UP() {
         assertMatchesOnly(
                 UP,
                 setOf(UP, UP_LEFT, UP_RIGHT)
@@ -22,7 +26,7 @@ class DirectionsMatcherTest {
     }
 
     @Test
-    fun matches_DOWN() {
+    fun matches_for_DOWN() {
         assertMatchesOnly(
                 DOWN,
                 setOf(DOWN, DOWN_LEFT, DOWN_RIGHT)
@@ -30,7 +34,7 @@ class DirectionsMatcherTest {
     }
 
     @Test
-    fun matches_LEFT() {
+    fun matches_for_LEFT() {
         assertMatchesOnly(
                 LEFT,
                 setOf(LEFT, UP_LEFT, DOWN_LEFT)
@@ -38,7 +42,7 @@ class DirectionsMatcherTest {
     }
 
     @Test
-    fun matches_RIGHT() {
+    fun matches_for_RIGHT() {
         assertMatchesOnly(
                 RIGHT,
                 setOf(RIGHT, UP_RIGHT, DOWN_RIGHT)
@@ -46,7 +50,7 @@ class DirectionsMatcherTest {
     }
 
     @Test
-    fun matches_not_cardinal() {
+    fun matches_gives_false_for_not_cardinal_directions() {
         val allDirections = values()
         val notCardinalDirections = allDirections.filter { it !in setOf(UP, DOWN, LEFT, RIGHT) }
         notCardinalDirections.forEach { notCardinal ->
@@ -56,14 +60,17 @@ class DirectionsMatcherTest {
         }
     }
 
-    private fun assertMatchesOnly(expected: Direction, matching: Set<Direction>) {
+    /**
+     * Assert that the specified [direction] matches only with the [matching] set of directions.
+     */
+    private fun assertMatchesOnly(direction: Direction, matching: Set<Direction>) {
         val notMatching = values().filter { it !in matching }
 
         matching.forEach {
-            assertTrue(matcher.matches(expected, it))
+            assertTrue(matcher.matches(direction, it))
         }
         notMatching.forEach {
-            assertFalse(matcher.matches(expected, it))
+            assertFalse(matcher.matches(direction, it))
         }
     }
 }

@@ -21,16 +21,22 @@ import org.junit.Before
 import org.junit.Test
 import java.util.concurrent.TimeUnit
 
+/**
+ * Tests for [humanDataListObservable].
+ */
 class MyObservablesTest {
 
+    // Used to control time.
     private val testScheduler = TestScheduler()
 
     private companion object {
+        // Used to mock methods in this file.
         const val FRAME_UTILS_CLASSNAME = "com.softbankrobotics.sample.attentionstatechecker.utils.FrameUtils"
     }
 
     @Before
     fun setUp() {
+        // Set all RxJava schedulers to testScheduler.
         RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
         RxJavaPlugins.setIoSchedulerHandler { testScheduler }
         mockkStatic(FRAME_UTILS_CLASSNAME)
@@ -65,6 +71,8 @@ class MyObservablesTest {
         val observable = humanDataListObservable(qiContext)
         val observer = observable.subscribeOn(testScheduler).test()
 
+        // Wait for 2 seconds, because humanDataListObservable waits for humans list stabilisation for 1 second,
+        // and distanceObservableFrom begins emitting after 1 second.
         testScheduler.advanceTimeBy(2L, TimeUnit.SECONDS)
 
         observer.assertValue(listOf(HumanData(human, attentionState, distance)))
@@ -96,10 +104,14 @@ class MyObservablesTest {
         val observable = humanDataListObservable(qiContext)
         val observer = observable.subscribeOn(testScheduler).test()
 
+        // Wait for 2 seconds, because humanDataListObservable waits for humans list stabilisation for 1 second,
+        // and distanceObservableFrom begins emitting after 1 second.
         testScheduler.advanceTimeBy(2L, TimeUnit.SECONDS)
 
+        // Call the captured listener.
         listenerSlot.captured.onHumansAroundChanged(emptyList())
 
+        // Wait for 1 second (humans list stabilisation)
         testScheduler.advanceTimeBy(1L, TimeUnit.SECONDS)
 
         observer.assertLastValueIs(emptyList())
@@ -131,9 +143,12 @@ class MyObservablesTest {
         val observable = humanDataListObservable(qiContext)
         val observer = observable.subscribeOn(testScheduler).test()
 
+        // Wait for 2 seconds, because humanDataListObservable waits for humans list stabilisation for 1 second,
+        // and distanceObservableFrom begins emitting after 1 second.
         testScheduler.advanceTimeBy(2L, TimeUnit.SECONDS)
 
         val newAttentionState = AttentionState.LOOKING_DOWN
+        // Call the captured listener.
         listenerSlot.captured.onAttentionChanged(newAttentionState)
 
         observer.assertLastValueIs(listOf(HumanData(human, newAttentionState, distance)))
@@ -162,11 +177,14 @@ class MyObservablesTest {
         val observable = humanDataListObservable(qiContext)
         val observer = observable.subscribeOn(testScheduler).test()
 
+        // Wait for 2 seconds, because humanDataListObservable waits for humans list stabilisation for 1 second,
+        // and distanceObservableFrom begins emitting after 1 second.
         testScheduler.advanceTimeBy(2L, TimeUnit.SECONDS)
 
         val newDistance = 3.0
         every { human.headFrame.distanceFrom(robotFrame) } returns newDistance
 
+        // Wait for 1 second (distance emission time)
         testScheduler.advanceTimeBy(1L, TimeUnit.SECONDS)
 
         observer.assertLastValueIs(listOf(HumanData(human, attentionState, newDistance)))

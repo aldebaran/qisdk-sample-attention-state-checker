@@ -16,17 +16,24 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Tests for [GameRobot].
+ */
 class GameRobotTest {
 
     private companion object {
+        // Used to mock methods in this file.
         const val DIRECTION_UTILS_CLASSNAME = "com.softbankrobotics.sample.attentionstatechecker.utils.DirectionUtils"
     }
 
+    // Mocked dependency.
     private val gameMachine = mockk<GameMachine>(relaxed = true)
+    // System under tests.
     private val gameRobot = GameRobot(gameMachine)
 
     @Before
     fun setUp() {
+        // Set all RxJava schedulers to Schedulers.trampoline(), to stay in the tests thread.
         RxJavaPlugins.setIoSchedulerHandler { Schedulers.trampoline() }
         mockkStatic(DIRECTION_UTILS_CLASSNAME)
     }
@@ -60,6 +67,7 @@ class GameRobotTest {
         val playing = Playing(expectedDirection, mockk(relaxed = true), mockk(relaxed = true), mockk(relaxed = true))
         machineStateIs(playing)
 
+        // Used to subscribe to the GameMachine.
         gameRobot.onRobotFocusGained(mockk())
 
         verify { gameMachine.postEvent(Match) }
@@ -74,11 +82,15 @@ class GameRobotTest {
         val playing = Playing(expectedDirection, mockk(relaxed = true), mockk(relaxed = true), mockk(relaxed = true))
         machineStateIs(playing)
 
+        // Used to subscribe to the GameMachine.
         gameRobot.onRobotFocusGained(mockk())
 
         verify { gameMachine.postEvent(NotMatch(lookDirection)) }
     }
 
+    /**
+     * Convenience method to put the game state to [gameState].
+     */
     private fun machineStateIs(gameState: GameState) {
         every { gameMachine.gameState() } returns Observable.just(gameState)
     }

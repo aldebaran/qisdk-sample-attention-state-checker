@@ -13,12 +13,18 @@ import io.mockk.mockk
 import org.junit.Test
 import java.util.*
 
+/**
+ * Tests for [GameMachine].
+ */
 class GameMachineTest {
 
+    // Mocked dependency.
     private val directionsProvider = mockk<DirectionsProvider> {
         every { provideDirections() } returns LinkedList(listOf(UP, DOWN, LEFT, RIGHT))
     }
+    // System under tests.
     private val machine = GameMachine(directionsProvider)
+    // TestObserver, observing the game state.
     private val observer = machine.gameState().test()
 
     @Test
@@ -190,6 +196,9 @@ class GameMachineTest {
         observer.assertLastValueIs(Briefing)
     }
 
+    /**
+     * Convenience method to post all [events], one after another.
+     */
     private fun GameMachine.postAll(vararg events: GameEvent) {
         events.forEach { postEvent(it) }
     }

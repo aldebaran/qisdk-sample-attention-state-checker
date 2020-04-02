@@ -12,6 +12,9 @@ import io.mockk.mockk
 import io.reactivex.Observable
 import org.junit.Test
 
+/**
+ * Tests for RxJava operators in MyOperators.kt.
+ */
 class MyOperatorsTest {
 
     @Test

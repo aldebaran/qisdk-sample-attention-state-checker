@@ -7,15 +7,22 @@ import io.reactivex.observers.TestObserver
 import org.junit.Before
 import org.junit.Test
 
+/**
+ * Tests for [AttentionStateObservable].
+ */
 class AttentionStateObservableTest {
 
     private val initialAttention = AttentionState.LOOKING_UP
+    // Used to capture the listener.
     private val listenerSlot = slot<Human.OnAttentionChangedListener>()
+    // Mocked dependency.
     private val human = mockk<Human>(relaxed = true) {
         every { attention } returns initialAttention
         every { addOnAttentionChangedListener(capture(listenerSlot)) } just Runs
     }
+    // System under tests.
     private val observable = AttentionStateObservable(human)
+    // TestObserver, observing the attention state.
     private val observer = TestObserver<AttentionState>()
 
     @Before
@@ -31,6 +38,7 @@ class AttentionStateObservableTest {
     @Test
     fun notifies_when_attention_change() {
         val newAttention = AttentionState.LOOKING_DOWN
+        // Call the captured listener.
         listenerSlot.captured.onAttentionChanged(newAttention)
 
         observer.assertValues(

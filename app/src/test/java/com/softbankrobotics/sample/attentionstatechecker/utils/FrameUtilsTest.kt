@@ -17,13 +17,19 @@ import org.junit.Assert.*
 import org.junit.Before
 import java.util.concurrent.TimeUnit
 
+/**
+ * Tests for methods in FrameUtils.kt.
+ */
 class FrameUtilsTest {
 
+    // Used as maximum error allowed for distance comparison (in meters).
     private val delta = 0.001
+    // Used to control time.
     private val testScheduler = TestScheduler()
 
     @Before
     fun setUp() {
+        // Set all RxJava schedulers to testScheduler.
         RxJavaPlugins.setComputationSchedulerHandler { testScheduler }
         RxJavaPlugins.setIoSchedulerHandler { testScheduler }
     }
@@ -55,11 +61,13 @@ class FrameUtilsTest {
         val observable = frame.distanceObservableFrom(baseFrame)
         val observer = observable.subscribeOn(testScheduler).test()
 
+        // Wait for 1 second (distance emission time)
         testScheduler.advanceTimeBy(1L, TimeUnit.SECONDS)
         observer.assertValue(5.0)
 
         every { frame.computeTransform(baseFrame).transform.translation } returns Vector3(2.0, 0.0, 0.0)
 
+        // Wait for 1 second (distance emission time)
         testScheduler.advanceTimeBy(1L, TimeUnit.SECONDS)
         observer.assertValueAt(1, 2.0)
     }
